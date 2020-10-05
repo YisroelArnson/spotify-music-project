@@ -4,7 +4,7 @@ var path = require('path');
 var cors = require('cors')
 var bodyParser = require('body-parser');
 var request = require('request');
-
+let port = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json())
 
@@ -57,6 +57,6 @@ app.post('/tokencode', function (req, res) {
 });
 
 
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log("Server running on port 3000");
 });
