@@ -7,12 +7,12 @@ var request = require('request');
 let port = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json())
-
+let baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
 
 app.get('/auth', function (req, res) {
   var scopes = 'user-library-read playlist-modify-public playlist-modify-private user-read-email';
   var my_client_id = 'cefa8cc2bdd94621be08b7ba3a4b4142';
-  var redirect_uri = 'http://localhost:3000/token'
+  var redirect_uri = baseUrl + '/token'
   res.redirect('https://accounts.spotify.com/authorize' +
     '?response_type=code' +
     '&client_id=' + my_client_id +
@@ -29,7 +29,7 @@ app.get('/token', function (req, res) {
 
 app.post('/tokencode', function (req, res) {
   const code = req.body.code
-  var redirect_uri = 'http://localhost:3000/token'
+  var redirect_uri = baseUrl + '/token'
 
   var postQuery = 'grant_type=authorization_code&code=' + code + '&redirect_uri=' + redirect_uri + '';
   console.log(postQuery)
@@ -58,5 +58,5 @@ app.post('/tokencode', function (req, res) {
 
 
 app.listen(port, () => {
-  console.log("Server running on port 3000");
+  console.log("Server running on port " + port);
 });
