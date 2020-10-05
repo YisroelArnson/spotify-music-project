@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "author": "Yisroel Arnson",
   "license": "ISC",
@@ -16,5 +17,8 @@
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.4",
     "request": "^2.88.2"
+  },
+  "engines": {
+    "node": "12.18.3"
   }
 }
