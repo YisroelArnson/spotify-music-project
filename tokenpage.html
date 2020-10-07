@@ -491,7 +491,8 @@
         </script>
 
         <script>
-            var baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
+            // var baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
+            var baseUrl = "http://localhost:5000"
             var access_token = '';
             var month = document.getElementById("month-list").value;
             var year = document.getElementById("year-list").value;
@@ -626,7 +627,7 @@
 
 
             function filterBySpecificMonth(song, listingCounter) {
-                if (song.added_at.split('-')[1] == ("0" + getMonthFromString(month)) &&
+                if (song.added_at.split('-')[1] == (getMonthFromString(month)) &&
                     song.added_at.split('-')[0] ==
                     year) {
                     trackList.push(song.track.uri);
@@ -789,7 +790,11 @@
 
 
             function getMonthFromString(mon) {
-                return new Date(Date.parse(mon + " 1, 2012")).getMonth() + 1
+                var date = new Date(Date.parse(mon + " 1, 2012")).getMonth() + 1
+                if (("" + date).length == 1) {
+                    return "0" + date;
+                }
+                return date;
             }
 
 
