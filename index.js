@@ -10,9 +10,7 @@ app.use(bodyParser.json())
 // let baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
 let baseUrl = "http://localhost:5000"
 app.get('/auth', function (req, res) {
-  res.json({
-    test: "this is a test"
-  })
+  res.send("this is a test")
   // var scopes = 'user-library-read playlist-modify-public playlist-modify-private user-read-email';
   // var my_client_id = 'cefa8cc2bdd94621be08b7ba3a4b4142';
   // var redirect_uri = baseUrl + '/token'
