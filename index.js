@@ -12,7 +12,7 @@ app.use(express.static("public"))
 // let baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
 let baseUrl = "http://localhost:5000"
 app.get('/auth', function (req, res) {
-  res.send("this is a test")
+  res.sendFile(path.join(__dirname + '/public/tokenpage.html'));
   // var scopes = 'user-library-read playlist-modify-public playlist-modify-private user-read-email';
   // var my_client_id = 'cefa8cc2bdd94621be08b7ba3a4b4142';
   // var redirect_uri = baseUrl + '/token'
@@ -26,7 +26,8 @@ app.get('/auth', function (req, res) {
 
 
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname + '/public/tokenpage.html'));
+  res.send('hello')
+  // res.sendFile(path.join(__dirname + '/public/tokenpage.html'));
 });
 
 
