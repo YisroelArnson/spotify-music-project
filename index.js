@@ -7,6 +7,8 @@ var request = require('request');
 let port = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json())
+app.use(express.static("public"))
+
 // let baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
 let baseUrl = "http://localhost:5000"
 app.get('/auth', function (req, res) {
@@ -24,12 +26,12 @@ app.get('/auth', function (req, res) {
 
 
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname + '/tokenpage.html'));
+  res.sendFile(path.join(__dirname + '/public/tokenpage.html'));
 });
 
 
 app.get('/token', function (req, res) {
-  res.sendFile(path.join(__dirname + '/tokenpage.html'));
+  res.sendFile(path.join(__dirname + '/public/tokenpage.html'));
 });
 
 
