@@ -17,6 +17,21 @@ body {
     flex-wrap: nowrap !important;
 }
 
+.toast {
+    color: #fff;
+    padding: 5px 10px;
+    margin: 20px;
+}
+
+.succesful-toast-bg {
+    background-color: #2ecc71;
+}
+
+.unsuccesful-toast-bg {
+    background-color: #e74c3c;
+}
+
+
 
 #main-banner {
     /* background: #7F7FD5; */

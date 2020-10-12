@@ -13,6 +13,11 @@
     var searchFilter = 'month';
     var isLoading = false;
 
+    $('.toast').toast({
+        delay: 4000
+    })
+
+
     function changeSearchFilter(selector, selectedElemCount) {
         searchFilter = selector
         if (selector == 'range') {
@@ -166,24 +171,17 @@
         return false;
     }
 
-
+    // https://stackoverflow.com/questions/16080378/check-if-one-date-is-between-two-dates
     function filterByRange(song, listingCounter) {
         var songMonth = parseInt(song.added_at.split('-')[1]);
         var songYear = parseInt(song.added_at.split('-')[0]);
         var startMonth = getMonthFromString(month);
         var startYear = year
-        var endMonth = getMonthFromString(endMonth);
-        var endYear = endYear
-        console.log(songMonth, songYear);
+        var endingMonth = getMonthFromString(endMonth);
+        var endingYear = endYear
 
-
-        // if(startMonth < songMonth < endMonth && < songYear) {
-        // console.log(parseInt(song.added_at.split('-')[1]), getMonthFromString(month))
-        // }
-
-        if (song.added_at.split('-')[1] == ("0" + getMonthFromString(month)) &&
-            song.added_at.split('-')[0] ==
-            year) {
+        console.log(startMonth + ' < ' + songMonth + ' < ' + endingMonth + " / " + startYear + " < " + songYear + " < " + endingYear)
+        if (startMonth < songMonth < endingMonth && startYear < songYear < endingYear) {
             trackList.push(song.track.uri);
             createSongListing(song, listingCounter);
             return true;
@@ -191,6 +189,21 @@
         return false;
     }
 
+    function displaySuccesfulPlaylistToast() {
+        $('.playlist-succesful-toast').toast('show')
+    }
+
+    function displayUnsuccesfulPlaylistToast() {
+        $('.playlist-unsuccesful-toast').toast('show')
+    }
+
+    function displayNoSongsFoundToast() {
+        $('.no-songs-found-toast').toast('show')
+    }
+
+    function displayErrorToast() {
+        $('.error-toast').toast('show')
+    }
 
     function fetchSongs() {
         if (access_token && !isLoading) {
@@ -226,6 +239,9 @@
                             stopSearchAnimation();
                             clearInterval(fetchInterval)
                             controller.abort();
+                            if (trackList <= 0) {
+                                displayNoSongsFoundToast()
+                            }
                         }
 
                         //Loop through returned response of songs and check if they match year and month
@@ -240,12 +256,19 @@
                                 }
                                 //range of time (Start month, start year, end month, end year)
                             } else if (searchFilter == 'range') {
-                                console.log('This is a range search')
-                                filterByRange(song, listingCounter)
+                                displayErrorToast();
+
+                                // if (filterByRange(song, listingCounter)) {
+                                //     addedSongCount += 1;
+                                //     listingCounter += 1;
+                                // }
                             } else if (addedSongCount != 0) {
                                 stopSearchAnimation();
                                 clearInterval(fetchInterval)
                                 controller.abort();
+                                if (trackList <= 0) {
+                                    displayNoSongsFoundToast()
+                                }
                             }
                         }
                     }).catch(error => {
@@ -262,24 +285,27 @@
 
 
     function createPlaylist(userId) {
-        fetch('https://api.spotify.com/v1/users/' + userId + '/playlists', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + access_token,
-                'content-type': 'application/json',
-
-            },
-            body: JSON.stringify({
-                "name": month + ' ' + year + ' top songs',
-                "description": 'The top songs in my song library from a specific month.',
-                "public": true
-            })
-        }).then(response => {
-            console.log(response)
-            return response.json()
-        }).then(data => {
-            addSongs(data.id)
-        }).catch(error => console.log(error))
+        if (trackList != 0) {
+            fetch('https://api.spotify.com/v1/users/' + userId + '/playlists', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "name": month + ' ' + year + ' top songs',
+                    "description": 'The top songs in my song library from a specific month.',
+                    "public": true
+                })
+            }).then(response => {
+                console.log(response)
+                return response.json()
+            }).then(data => {
+                addSongs(data.id)
+            }).catch(error => console.log(error))
+        } else {
+            displayUnsuccesfulPlaylistToast()
+        }
     }
 
 
@@ -296,14 +322,18 @@
                 },
                 body: JSON.stringify(tempTrackList)
             }).then(response => {
-                console.log(response)
+                console.log(response.status)
+                if (response.status == 201) {
+                    displaySuccesfulPlaylistToast()
+                } else {
+                    displayUnsuccesfulPlaylistToast()
+                }
                 return response.json()
             }).then(data => {
                 console.log(data)
             }).catch(error => console.log(error))
         }
     }
-
 
     function getUserInfo() {
         fetch('https://api.spotify.com/v1/me', {

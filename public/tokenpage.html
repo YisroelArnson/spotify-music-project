@@ -31,6 +31,34 @@
 
 <body>
 
+    <div class="toast succesful-toast-bg playlist-succesful-toast" role="alert" aria-live="assertive" aria-atomic="true"
+        style="position: fixed; top: 0; right: 0;">
+        <div class="toast-body">
+            Playlist created! Check your spotify!
+        </div>
+    </div>
+
+    <div class="toast unsuccesful-toast-bg no-songs-found-toast" role="alert" aria-live="assertive" aria-atomic="true"
+        style="position: fixed; top: 0; right: 0;">
+        <div class="toast-body">
+            No songs added for this date range.
+        </div>
+    </div>
+
+    <div class="toast unsuccesful-toast-bg playlist-unsuccesful-toast" role="alert" aria-live="assertive" aria-atomic="true"
+        style="position: fixed; top: 0; right: 0;">
+        <div class="toast-body">
+            Search for tracks before creating a playlist.
+        </div>
+    </div>
+
+    <div class="toast unsuccesful-toast-bg error-toast" role="alert" aria-live="assertive" aria-atomic="true"
+        style="position: fixed; top: 0; right: 0;">
+        <div class="toast-body">
+            An error occured.
+        </div>
+    </div>
+
     <div class="jumbotron mb-0 pb-4" id="main-banner">
         <div class="container" id="banner-container">
             <h1 id="banner-title" class="muli-bold">REDISCOVER OLD FAVORITES!</h1>
@@ -53,7 +81,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="container">
         <div class="row my-4" id="end-date-inputs-row">
@@ -316,15 +343,14 @@
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
         </script>
-
-        <script src="./main.js"></script>
-
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
             integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
         </script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
             integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
         </script>
+        <script src="./main.js"></script>
+
 </body>
 
 </html>
