@@ -1,5 +1,13 @@
-    var baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
-    // var baseUrl = "http://localhost:5000"
+// start fetching all of the users liked songs ASAP
+// Save these songs in a master list
+// When the user clicks search Search through the master list 
+// This prevents the need to fetch the songs for each search and will speed up loading times by A LOT
+// What if the user searches for a date that hasn't been loaded yet?
+// then set a 3 second timeout and recheck the list. Do this until song date has been found
+// or until there are no more songs to fetch from API.
+
+// var baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
+    var baseUrl = "http://localhost:5000"
     var access_token = '';
     var month = document.getElementById("month-list").value;
     var year = document.getElementById("year-list").value;
@@ -233,6 +241,7 @@
                         console.log(response)
                         return response.json()
                     }).then(data => {
+                        console.log(data)
                         console.log(data.items.length)
                         //If response is 0 stop sending request
                         if (data.items.length <= 0) {
