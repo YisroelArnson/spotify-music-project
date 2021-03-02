@@ -116,7 +116,7 @@
                 </select>
             </div>
         </div>
-        <div class="row my-4">
+        <div class="row my-4" id="start-date-inputs-row"> 
             <div class="col">
                 <select class="form-control" onChange="getMonthVal()" id="month-list">
                     <option>Jan</option>
@@ -151,7 +151,7 @@
         </div>
 
         <div class="row justify-content-center my-2">
-            <button class="activation-buttons" id="search-songs-button" onClick="fetchSongs()">
+            <button class="activation-buttons" id="search-songs-button" onClick="manageSearchFunction()">
                 Search
             </button>
             <button class="activation-buttons" id="playlist-button" onClick="getUserInfo()">Create playlist</button>
@@ -336,6 +336,11 @@
             </div>
         </div>
 
+        <div class="row justify-content-center my-2">
+            <button class="activation-buttons" id="search-songs-button" onClick="displaySongListings()">
+                Load 50 more
+            </button>
+        </div>
 
 
 

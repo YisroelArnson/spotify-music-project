@@ -6,21 +6,39 @@
 // then set a 3 second timeout and recheck the list. Do this until song date has been found
 // or until there are no more songs to fetch from API.
 
+
+// Searching by month
+
+// Look for songs that have the month that the user is searching for. If the last song of the tracklist is a song with the corresponding month
+// then restart the search. 
+// Keep checking until we reach the last song of the tracklist. If the last song has the corresponding date then restart the search after 3 seconds. 
+
+
 // var baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
     var baseUrl = "http://localhost:5000"
     var access_token = '';
     var month = document.getElementById("month-list").value;
     var year = document.getElementById("year-list").value;
+    var specifiedDate = new Date();
     var endMonth = document.getElementById("end-month-list").value;
     var endYear = document.getElementById("end-year-list").value;
     var trackList = [];
+    var playlistSongs = [];
     var removedTracks = [];
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const code = urlParams.get('code');
     var searchFilter = 'month';
     var isLoading = false;
-
+    var monthInMili = 2629746000;
+    let offset = 0;
+    const limit = 50;
+    const controller = new AbortController();
+    const signal = controller.signal;
+    var fetchingSongs = false;
+    var lastLoadedDate;
+    var displayedListingIndex = 0;
+    var doneFetchingSongs = false;
     $('.toast').toast({
         delay: 4000
     })
@@ -32,6 +50,12 @@
             document.getElementById('end-date-inputs-row').style.display = 'flex'
         } else {
             document.getElementById('end-date-inputs-row').style.display = 'none'
+        }
+
+        if(selector == 'all-time') {
+            document.getElementById('start-date-inputs-row').style.display = 'none'
+        } else {
+            document.getElementById('start-date-inputs-row').style.display = 'flex'
         }
 
         var selecterElems = document.getElementsByClassName('filter-buttons')
@@ -98,9 +122,11 @@
                 console.log(response)
                 return response.json()
             }).then(data => {
-                access_token = data.data.access_token
                 if (data.data.error) {
                     window.location = baseUrl + "/auth"
+                } else {
+                    access_token = data.data.access_token
+                    getAllLikedSongs();
                 }
             })
             .catch(err => {
@@ -168,33 +194,165 @@
         document.getElementById('search-songs-button').innerHTML = 'Search'
     }
 
-    function filterBySpecificMonth(song, listingCounter) {
-        if (song.added_at.split('-')[1] == (getMonthFromString(month)) &&
-            song.added_at.split('-')[0] ==
-            year) {
-            trackList.push(song.track.uri);
-            createSongListing(song, listingCounter);
-            return true;
+    //Change search function based on if search is month, range, or all time
+    function manageSearchFunction() {
+        displayedListingIndex = 0;
+        clearSongListing();
+        if(searchFilter == 'month') {
+            filterBySpecificMonth(); 
+            startSearchAnimation();
+        }   
+        else if(searchFilter == 'range') {
+            filterByRange();
+            startSearchAnimation();
+        } else if(searchFilter == 'all-time') {
+            allTimePlaylist();
+            startSearchAnimation();
         }
-        return false;
     }
 
-    // https://stackoverflow.com/questions/16080378/check-if-one-date-is-between-two-dates
-    function filterByRange(song, listingCounter) {
-        var songMonth = parseInt(song.added_at.split('-')[1]);
-        var songYear = parseInt(song.added_at.split('-')[0]);
-        var startMonth = getMonthFromString(month);
-        var startYear = year
-        var endingMonth = getMonthFromString(endMonth);
-        var endingYear = endYear
+    function filterBySpecificMonth() {
+        playlistSongs = [];
+        if(access_token != '') {
+            specifiedDate = new Date(year, getMonthFromString(month)-1);
+            isLoading = true;
+            if(Date.parse(specifiedDate) < Date.parse(lastLoadedDate)) {
+                setTimeout(function() {
+                    filterBySpecificMonth()
+                }, 500)
+            } else {
+                let listingCounter = 0;
+                let songCountElement = document.getElementById('song-count-element');
 
-        console.log(startMonth + ' < ' + songMonth + ' < ' + endingMonth + " / " + startYear + " < " + songYear + " < " + endingYear)
-        if (startMonth < songMonth < endingMonth && startYear < songYear < endingYear) {
-            trackList.push(song.track.uri);
-            createSongListing(song, listingCounter);
-            return true;
+                clearSongListing()
+                for(var i = 0; i < trackList.length; i++) {
+                    if (trackList[i].added_at.split('-')[1] == (getMonthFromString(month)) &&
+                        trackList[i].added_at.split('-')[0] ==
+                        year) {
+                            listingCounter += 1;
+                            playlistSongs.push(trackList[i])
+                            if(listingCounter <= 50) {
+                                createSongListing(trackList[i], listingCounter)
+                                displayedListingIndex++;
+                            }
+                        }
+                        songCountElement.innerHTML = listingCounter;
+                    }
+                    if(playlistSongs.length == 0 && !access_token) {
+                        displayNoSongsFoundToast();
+                    }
+                    const clearAnimationInterval = setInterval(() => {
+                    if(Date.parse(lastLoadedDate) + monthInMili < Date.parse(specifiedDate)) {
+                        stopSearchAnimation()
+                        isLoading = false;
+                        clearInterval(clearAnimationInterval)
+                    }
+                }, 500);
+            }
         }
-        return false;
+    }
+
+    function filterByRange() {
+        playlistSongs = [];
+        if(access_token != '') {
+            var startDate = new Date(year, getMonthFromString(month)-1);
+            var endDate = new Date(endYear, getMonthFromString(endMonth)-1);
+            //TO DO: Check if start date is more recent than end date
+            if((Date.parse(endDate) + monthInMili) < Date.parse(lastLoadedDate)) {
+                setTimeout(function() {
+                    console.log('reloading')
+                    filterByRange()
+                }, 500)
+            } else {
+                var listingCounter = 0;
+                var songCountElement = document.getElementById('song-count-element');
+                var parsedStartDate = Date.parse(startDate)
+                var parsedEndDate = Date.parse(endDate)
+                var index = 0;
+
+                function doBlock() {
+                    var count = 100;
+                    while(count > 0 && index < trackList.length) {
+                        let songDate = new Date(trackList[index].added_at)
+                        // console.log(Date.parse(startDate) + " > " + Date.parse(songDate) + " > " + Date.parse(endDate))
+                        // console.log(startDate + " > " + songDate + " > " + endDate)
+                        if (parsedStartDate > Date.parse(songDate) && Date.parse(songDate) > parsedEndDate) {
+                                // console.log("Added ::::" + songDate)    
+                                listingCounter += 1;
+                                playlistSongs.push(trackList[index])
+                                // createSongListing(trackList[index], listingCounter)
+                            }
+                            songCountElement.innerHTML = listingCounter;
+                            ++index;
+                            --count;
+                            if(playlistSongs.length == 0 && !access_token) {
+                                displayNoSongsFoundToast();
+                            }
+                    }
+                    if(index < trackList.length) {
+                        setTimeout(doBlock, 10);
+                    } else if(index >= trackList.length) {
+                        displaySongListings(100);
+                        stopSearchAnimation();                        
+                    }
+                }
+                doBlock();
+            }
+        }
+    }
+
+    function allTimePlaylist() {
+        playlistSongs = [];
+        if(access_token != '') {
+            isLoading = true;
+            if(!doneFetchingSongs) {
+                setTimeout(function() {
+                    allTimePlaylist()
+                }, 1000)
+            } else {
+                let listingCounter = 0;
+                let songCountElement = document.getElementById('song-count-element');
+
+                clearSongListing()
+                listingCounter = trackList.length;
+                playlistSongs = trackList;
+                let minimumCountToDisplay = 100;
+                if(playlistSongs.length < minimumCountToDisplay) {
+                    minimumCountToDisplay = playlistSongs.length;
+                }
+                for(var i = 0; i < minimumCountToDisplay; i++) {
+                    createSongListing(trackList[i], i+1)
+                    displayedListingIndex++;
+                }
+
+                songCountElement.innerHTML = listingCounter;
+                if(playlistSongs.length == 0 && !access_token) {
+                    displayNoSongsFoundToast();
+                }
+                const clearAnimationInterval = setInterval(() => {
+                    if(doneFetchingSongs) {
+                        stopSearchAnimation()
+                        isLoading = false;
+                        clearInterval(clearAnimationInterval)
+                    }
+                }, 500);
+            }
+        }
+    }
+
+    function displaySongListings(amountToLoad) {
+        if(displayedListingIndex == 0) {
+            clearSongListing()
+        }
+        let startingIndex = displayedListingIndex;
+        let displayHowMuch = amountToLoad || 50;
+        let count = startingIndex;
+
+        while(count < startingIndex + displayHowMuch && displayedListingIndex < playlistSongs.length) {
+            createSongListing(playlistSongs[count], count+1)
+            count++;    
+            displayedListingIndex++;
+        }
     }
 
     function displaySuccesfulPlaylistToast() {
@@ -214,82 +372,43 @@
     }
 
     function fetchSongs() {
-        if (access_token && !isLoading) {
-            let offset = 0;
-            const limit = 50;
-            const numberOfTracks = 100;
-            let addedSongCount = 0;
-            var listingCounter = 1;
-            var callCount = 0;
-            var maxCallCount = 115;
-            var songCountElement = document.getElementById('song-count-element');
-            const controller = new AbortController()
-            const signal = controller.signal
+        return fetch('https://api.spotify.com/v1/me/tracks?limit=' + limit + '&offset=' + offset, {
+                method: 'GET',
+                signal: signal,
+                headers: {
+                    'Authorization': 'Bearer ' + access_token
+                }
+            }).then(response => {
+                // console.log(response)   
+                return response.json()  
+            }).then(data => {
+                if(data.items.length == 0) {
+                    fetchingSongs = false;
+                }
+                return data.items
+            })
+    }
 
-            trackList = [];
-            songCountElement.innerHTML = addedSongCount;
-            clearSongListing();
-            startSearchAnimation();
-            const fetchInterval = setInterval(function () {
-                    fetch('https://api.spotify.com/v1/me/tracks?limit=' + limit + '&offset=' + offset, {
-                        method: 'GET',
-                        signal: signal,
-                        headers: {
-                            'Authorization': 'Bearer ' + access_token
-                        }
-                    }).then(response => {
-                        console.log(response)
-                        return response.json()
-                    }).then(data => {
-                        console.log(data)
-                        console.log(data.items.length)
-                        //If response is 0 stop sending request
-                        if (data.items.length <= 0) {
-                            stopSearchAnimation();
-                            clearInterval(fetchInterval)
-                            controller.abort();
-                            if (trackList <= 0) {
-                                displayNoSongsFoundToast()
-                            }
-                        }
+    function getAllLikedSongs() {
+        fetchingSongs = true;
+        fetchSongs().then(songs => {
+            // console.log(songs)
+            offset += limit;   
+            if(songs.length != 0) {
+                doneFetchingSongs = false;
+                lastLoadedDate = new Date(songs[songs.length - 1].added_at.split('-')[0], songs[songs.length - 1].added_at.split('-')[1], songs[songs.length - 1].added_at.split('-')[2].split('T')[0])
+                
+                console.log(lastLoadedDate)
 
-                        //Loop through returned response of songs and check if they match year and month
-                        for (var i = 0; i < data.items.length; i++) {
-                            songCountElement.innerHTML = addedSongCount;
-                            let song = data.items[i]
-                            //Specific month (month, year)
-                            if (searchFilter == 'month') {
-                                if (filterBySpecificMonth(song, listingCounter)) {
-                                    addedSongCount += 1;
-                                    listingCounter += 1;
-                                }
-                                //range of time (Start month, start year, end month, end year)
-                            } else if (searchFilter == 'range') {
-                                displayErrorToast();
-
-                                // if (filterByRange(song, listingCounter)) {
-                                //     addedSongCount += 1;
-                                //     listingCounter += 1;
-                                // }
-                            } else if (addedSongCount != 0) {
-                                stopSearchAnimation();
-                                clearInterval(fetchInterval)
-                                controller.abort();
-                                if (trackList <= 0) {
-                                    displayNoSongsFoundToast()
-                                }
-                            }
-                        }
-                    }).catch(error => {
-                        console.log(error)
-                        clearInterval(fetchInterval)
-                        controller.abort();
-                    })
-                    callCount += 1;
-                    offset += limit;
-                },
-                200)
-        }
+                trackList = trackList.concat(songs)
+                getAllLikedSongs();
+            } else {
+                console.log(trackList)
+                doneFetchingSongs = true;
+            }
+        }).catch(error => {
+            console.log(error)
+        })
     }
 
 
@@ -310,18 +429,79 @@
                 console.log(response)
                 return response.json()
             }).then(data => {
-                addSongs(data.id)
+                addSongsToPlaylist(data.id)
             }).catch(error => console.log(error))
         } else {
             displayUnsuccesfulPlaylistToast()
         }
     }
 
+    // function uploadTracksToPlaylist() {
+    //     return fetch('https://api.spotify.com/v1/playlists/' + id + '/tracks', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Authorization': 'Bearer ' + access_token,
+    //             'content-type': 'application/json'
+    //         },
+    //         body: JSON.stringify(tempTrackList)
+    //     })
+    // }
 
-    function addSongs(id) {
-        var tempTrackList = []
-        for (var i = 0; i <= trackList.length; i += 100) {
-            tempTrackList = trackList.slice(i, i + 100)
+    // function addSongsToPlaylist(id) {
+    //     var uriTrackList = [];
+    //     var tempTrackList = [];
+    //     let index = 0;
+    //     let count = 100;
+    //     for(var j = 0; j < playlistSongs.length; j++) {
+    //         uriTrackList.push(playlistSongs[j]['track']['uri'])
+    //     }
+
+    //     function flipFlopUpload() {
+    //         while(count > 0 && index < playlistSongs.length) {
+    //             tempTrackList = uriTrackList.slice(index, index + 100)
+
+
+
+    //             count--;
+    //             index += 100;    
+    //         }
+    //     }
+
+
+    //     for (var i = 0; i <= uriTrackList.length; i += 100) {
+    //         tempTrackList = uriTrackList.slice(i, i + 100)
+
+    //         fetch('https://api.spotify.com/v1/playlists/' + id + '/tracks', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Authorization': 'Bearer ' + access_token,
+    //                 'content-type': 'application/json'
+    //             },
+    //             body: JSON.stringify(tempTrackList)
+    //         }).then(response => {
+    //             console.log(response.status)
+    //             if (response.status == 201) {
+    //                 displaySuccesfulPlaylistToast()
+    //             } else {
+    //                 displayUnsuccesfulPlaylistToast()
+    //             }
+    //             return response.json()
+    //         }).then(data => {
+    //             console.log(data)
+    //         }).catch(error => console.log(error))
+    //     }
+    // }
+
+    function addSongsToPlaylist(id) {
+        var uriTrackList = [];
+        var tempTrackList = [];
+
+        for(var j = 0; j < playlistSongs.length; j++) {
+            uriTrackList.push(playlistSongs[j]['track']['uri'])
+        }
+        console.log(uriTrackList)
+        for (var i = 0; i <= uriTrackList.length; i += 100) {
+            tempTrackList = uriTrackList.slice(i, i + 100)
 
             fetch('https://api.spotify.com/v1/playlists/' + id + '/tracks', {
                 method: 'POST',
@@ -343,6 +523,8 @@
             }).catch(error => console.log(error))
         }
     }
+
+
 
     function getUserInfo() {
         fetch('https://api.spotify.com/v1/me', {
@@ -367,6 +549,5 @@
         }
         return date;
     }
-
 
     getToken()

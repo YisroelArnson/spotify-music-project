@@ -64,6 +64,10 @@ app.post('/tokencode', function (req, res) {
 
 });
 
+app.get("/", function(req, res) {
+  res.send("Home page under construction...")
+})
+
 
 app.listen(port, () => {
   console.log("Server running on port " + port);
