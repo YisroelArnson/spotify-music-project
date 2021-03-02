@@ -22,13 +22,6 @@ app.get('/auth', function (req, res) {
     '&redirect_uri=' + encodeURIComponent(redirect_uri));
 });
 
-
-
-app.get('/', function (req, res) {
-  res.send('hello')
-});
-
-
 app.get('/token', function (req, res) {
   res.sendFile(path.join(__dirname + '/public/tokenpage.html'));
 });
