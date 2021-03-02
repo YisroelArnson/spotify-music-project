@@ -27,7 +27,6 @@ app.get('/token', function (req, res) {
 });
 
 
-
 app.post('/tokencode', function (req, res) {
   const code = req.body.code
   var redirect_uri = baseUrl + '/token'
@@ -58,7 +57,7 @@ app.post('/tokencode', function (req, res) {
 });
 
 app.get("/", function(req, res) {
-  res.send("Home page under construction...")
+  res.sendFile(path.join(__dirname + '/public/index.html'));
 })
 
 
