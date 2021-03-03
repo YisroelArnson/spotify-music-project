@@ -13,7 +13,6 @@
 // then restart the search. 
 // Keep checking until we reach the last song of the tracklist. If the last song has the corresponding date then restart the search after 3 seconds. 
 
-
     // var baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
     var baseUrl = "http://localhost:5000"
     var access_token = '';
@@ -111,7 +110,7 @@
 
 
     function getToken() {
-        fetch(baseUrl + '/tokencode', {
+        fetch(baseUrl + '/auth/access_token', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json',
@@ -414,6 +413,29 @@
 
 
     function createPlaylist(userId) {
+        console.log(playlistSongs)
+        //When the user chooses to create a playlist, Send the chosen list to my own API
+        fetch(baseUrl + '/tracks/playlist', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(playlistSongs)
+        }).then(response => {
+            console.log(response.status)
+        })
+
+        fetch(baseUrl + '/tracks/tracks', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(playlistSongs)
+            }).then(response => {
+                console.log(response.status)
+            })
         if (trackList != 0) {
             fetch('https://api.spotify.com/v1/users/' + userId + '/playlists', {
                 method: 'POST',
