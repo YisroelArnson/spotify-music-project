@@ -14,8 +14,8 @@
 // Keep checking until we reach the last song of the tracklist. If the last song has the corresponding date then restart the search after 3 seconds. 
 
 
-    // var baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
-    var baseUrl = "http://localhost:5000"
+    var baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
+    // var baseUrl = "http://localhost:5000"
     var access_token = '';
     var month = document.getElementById("month-list").value;
     var year = document.getElementById("year-list").value;
