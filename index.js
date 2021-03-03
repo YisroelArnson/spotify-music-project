@@ -9,8 +9,8 @@ app.use(cors());
 app.use(bodyParser.json())
 app.use(express.static("public"))
 
-// let baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
-let baseUrl = "http://localhost:5000"
+let baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
+// let baseUrl = "http://localhost:5000"
 app.get('/auth', function (req, res) {
   var scopes = 'user-library-read playlist-modify-public playlist-modify-private user-read-email';
   var my_client_id = 'cefa8cc2bdd94621be08b7ba3a4b4142';
