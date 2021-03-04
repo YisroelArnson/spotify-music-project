@@ -22,6 +22,7 @@ exports.add_full_playlist = (req, res) => {
 
 exports.add_tracks = (req, res) => {
     const playlist = req.body;
+    console.log(Object.keys(playlist).length)
     for(let i = 0; i < playlist.length; i++) {
         let song_temp = playlist[i];
         let artists_array = []
