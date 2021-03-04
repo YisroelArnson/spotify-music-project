@@ -83,7 +83,10 @@
     </div>
 
     <div class="container">
-        <div class="row my-4" id="end-date-inputs-row">
+        <div class="row justify-content-center">
+        </div>
+        <div class="row my-4 align-items-center" id="end-date-inputs-row">
+            <h6 id="end-indic" class="pt-3 mr-1 text-muted">from</h6>
             <div class="col">
                 <select class="form-control" onChange="getEndMonthVal()" id="end-month-list">
                     <option>Jan</option>
@@ -102,8 +105,9 @@
             </div>
             <div class="col">
                 <select class="form-control" onChange="getEndYearVal()" id="end-year-list">
-                    <option>2020</option>
-                    <option selected="selected">2019</option>
+                    <option>2021</option>
+                    <option selected="selected">2020</option>
+                    <option>2019</option>
                     <option>2018</option>
                     <option>2017</option>
                     <option>2016</option>
@@ -117,6 +121,7 @@
             </div>
         </div>
         <div class="row my-4" id="start-date-inputs-row"> 
+            <h6 id="start-indic" class="pt-3 mr-1 text-muted">to  </h6>
             <div class="col">
                 <select class="form-control" onChange="getMonthVal()" id="month-list">
                     <option>Jan</option>
@@ -135,6 +140,7 @@
             </div>
             <div class="col">
                 <select class="form-control" onChange="getYearVal()" id="year-list">
+                    <option>2021</option>
                     <option>2020</option>
                     <option>2019</option>
                     <option>2018</option>

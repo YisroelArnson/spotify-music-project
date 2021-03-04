@@ -13,8 +13,8 @@
 // then restart the search. 
 // Keep checking until we reach the last song of the tracklist. If the last song has the corresponding date then restart the search after 3 seconds. 
 
-    var baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
-    // var baseUrl = "http://localhost:5000"
+    // var baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
+    var baseUrl = "http://localhost:5000"
     var access_token = '';
     var month = document.getElementById("month-list").value;
     var year = document.getElementById("year-list").value;
@@ -48,8 +48,12 @@
         searchFilter = selector
         if (selector == 'range') {
             document.getElementById('end-date-inputs-row').style.display = 'flex'
+            document.getElementById('start-indic').style.display = 'flex'
+            document.getElementById('end-indic').style.display = 'flex'
         } else {
             document.getElementById('end-date-inputs-row').style.display = 'none'
+            document.getElementById('start-indic').style.display = 'none'
+            document.getElementById('end-indic').style.display = 'none'
         }
 
         if(selector == 'all-time') {
