@@ -24,7 +24,6 @@ const authRoutes = require('./api/routes/auth');
 const playlistRoutes = require('./api/routes/playlist');
 const tracksRoutes = require('./api/routes/track');
 
-
 app.use('/auth', authRoutes);
 app.use('/playlist', playlistRoutes);
 app.use('/tracks', tracksRoutes)
