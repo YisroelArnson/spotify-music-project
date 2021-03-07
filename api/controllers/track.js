@@ -31,6 +31,9 @@ exports.add_tracks = (req, res) => {
             artists_array.push({id: song_temp.track.artists[k].id, name: song_temp.track.artists[k].name})
         }
 
+        //Query spotify API to search for more information on a song.
+        //Spotify reference: Search for an Item
+
         if(song_temp) {
             Track.findOne({song_id: song_temp.track.id}, function(err, result) {
                 try {
