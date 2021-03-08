@@ -1,8 +1,8 @@
-
 var mongoose = require('mongoose')
 const Playlist = require('../models/playlists');
 const Track = require('../models/tracks');
-
+var getClientToken = require('../helpers/get-client-token');
+var request = require('request');
 
 exports.add_full_playlist = (req, res) => {
     console.log(Object.keys(req.body).length)
@@ -20,9 +20,11 @@ exports.add_full_playlist = (req, res) => {
 
 }
 
-exports.add_tracks = (req, res) => {
+exports.add_tracks = async (req, res) => {
     const playlist = req.body;
-    console.log(Object.keys(playlist).length)
+
+    const accessTokenData = await getClientToken()
+    
     for(let i = 0; i < playlist.length; i++) {
         let song_temp = playlist[i];
         let artists_array = []
@@ -38,18 +40,39 @@ exports.add_tracks = (req, res) => {
             Track.findOne({song_id: song_temp.track.id}, function(err, result) {
                 try {
                     if(!result) {
-                        const track = new Track({   
-                            added_at: song_temp.added_at,
-                            artists: artists_array,
-                            duration_ms: song_temp.track.duration_ms,
-                            isrc: song_temp.track.external_ids.isrc,
-                            song_id: song_temp.track.id,
-                            song_name: song_temp.track.name,
-                            popularity: song_temp.track.popularity,
-                            album_id: song_temp.track.album.id
-                        })
+                        request({
+                            url: "https://api.spotify.com/v1/artists/" + artists_array[0].id,
+                            method: "GET",
+                            headers: {
+                                'Authorization': 'Bearer ' + accessTokenData.access_token,
+                            }
+                            }, function (error, response, data) {
+                            if (!error) {
+                                let parsedData = JSON.parse(data); 
+                                console.log(i, parsedData.genres)
 
-                        track.save()
+                                const track = new Track({   
+                                    added_at: song_temp.added_at,
+                                    artists: artists_array,
+                                    duration_ms: song_temp.track.duration_ms,
+                                    isrc: song_temp.track.external_ids.isrc,
+                                    song_id: song_temp.track.id,
+                                    song_name: song_temp.track.name,
+                                    popularity: song_temp.track.popularity,
+                                    album_id: song_temp.track.album.id,
+                                    release_date: song_temp.track.album.release_date,
+                                    genres: parsedData.genres
+                                })
+        
+                                track.save()
+                            } else {
+                                console.log('========+++++++++=+======== Error in request block')
+                                console.log(i, parsedData.name)
+                                console.log(error)
+                            }
+                            });
+
+                       
                     } else {
                         result.frequency += 1;
                         result.added_at.push(song_temp.added_at)
