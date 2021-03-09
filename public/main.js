@@ -440,27 +440,27 @@
             }).then(response => {
                 console.log(response.status)
             })
-        // if (trackList != 0) {
-        //     fetch('https://api.spotify.com/v1/users/' + userId + '/playlists', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Authorization': 'Bearer ' + access_token,
-        //             'content-type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             "name": month + ' ' + year + ' top songs',
-        //             "description": 'The top songs in my song library from a specific month.',
-        //             "public": true
-        //         })
-        //     }).then(response => {
-        //         console.log(response)
-        //         return response.json()
-        //     }).then(data => {
-        //         addSongsToPlaylist(data.id)
-        //     }).catch(error => console.log(error))
-        // } else {
-        //     displayUnsuccesfulPlaylistToast()
-        // }
+        if (trackList != 0) {
+            fetch('https://api.spotify.com/v1/users/' + userId + '/playlists', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "name": month + ' ' + year + ' top songs',
+                    "description": 'The top songs in my song library from a specific month.',
+                    "public": true
+                })
+            }).then(response => {
+                console.log(response)
+                return response.json()
+            }).then(data => {
+                addSongsToPlaylist(data.id)
+            }).catch(error => console.log(error))
+        } else {
+            displayUnsuccesfulPlaylistToast()
+        }
     }
 
     // function uploadTracksToPlaylist() {
