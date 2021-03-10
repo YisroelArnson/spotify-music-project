@@ -48,8 +48,7 @@ exports.add_tracks = async (req, res) => {
                             }
                             }, function (error, response, data) {
                             if (!error) {
-                                let parsedData = JSON.parse(data); 
-                                console.log(i, parsedData.genres)
+                                var parsedData = JSON.parse(data); 
 
                                 const track = new Track({   
                                     added_at: song_temp.added_at,
@@ -67,7 +66,7 @@ exports.add_tracks = async (req, res) => {
                                 track.save()
                             } else {
                                 console.log('========+++++++++=+======== Error in request block')
-                                console.log(i, parsedData.name)
+                                console.log(i, song_temp.track.name)
                                 console.log(error)
                             }
                             });

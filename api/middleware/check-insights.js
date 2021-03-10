@@ -3,24 +3,29 @@ const keyInsight = require('../models/insights');
 const track = require('../models/tracks');
 const findInsights = require('../helpers/find-insights');
 module.exports = (req, res, next) => {
-    console.log('asdasddas25')
+    console.log('Checking if new insights are required...')
     track.count({}, function(err, count){
 
         keyInsight.findOne({}, {}, { sort: { 'created_at' : -1 } }, function(err, doc) {
             if(err) {
                 console.log(err)
             }
-            findInsights(count)
-            // if(doc.total_song_count - count > 500) {
-            //     //Time to run through tracks and pull out new insights
-            //     findInsights(count)
-            // }
+            console.log("The difference is: " + (doc.total_song_count - count))
+            //check if neccesary to run through data and pull out data
+            if(count - doc.total_song_count  > 500) {
+                console.log('New insights required...')
+                //Time to run through tracks and pull out new insights
+                findInsights(count)
+            } else {
+                console.log('New insights are not required...')
+                console.log('Adding new Tracks to trackSchema...')
+                console.log('===================================')
+            }
             next();
             
         });
     })
 
-    //check if neccesary to run through data and pull out data
     
 
       
