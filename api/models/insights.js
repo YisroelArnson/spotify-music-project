@@ -5,7 +5,7 @@ const keyInsight = mongoose.Schema(
         _id: mongoose.Schema.Types.ObjectId,
         pop_song: {type: Object},
         pop_artists: {type: Object},
-        pop_category: {type: Object},
+        pop_genres: {type: Object},
         pop_year_release: {type: Object},
         total_song_count: {type: Number}
     },

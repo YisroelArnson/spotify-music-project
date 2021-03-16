@@ -11,6 +11,7 @@ module.exports = (req, res, next) => {
                 console.log(err)
             }
             console.log("The difference is: " + (doc.total_song_count - count))
+
             //check if neccesary to run through data and pull out data
             if(count - doc.total_song_count  > 500) {
                 console.log('New insights required...')
