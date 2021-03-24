@@ -14,7 +14,8 @@
 // Keep checking until we reach the last song of the tracklist. If the last song has the corresponding date then restart the search after 3 seconds. 
 
     var baseUrl = "https://spotifyplaylistcreator.herokuapp.com"
-    // var baseUrl = "http://localhost:5000"
+    // var baseUrl = "http://localhost:5000";
+    var allowPlaylistCreation = true;
     var access_token = '';
     var month = document.getElementById("month-list").value;
     var year = document.getElementById("year-list").value;
@@ -440,27 +441,30 @@
             }).then(response => {
                 console.log(response.status)
             })
-        if (trackList != 0) {
-            fetch('https://api.spotify.com/v1/users/' + userId + '/playlists', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + access_token,
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify({
-                    "name": month + ' ' + year + ' top songs',
-                    "description": 'The top songs in my song library from a specific month.',
-                    "public": true
-                })
-            }).then(response => {
-                console.log(response)
-                return response.json()
-            }).then(data => {
-                addSongsToPlaylist(data.id)
-            }).catch(error => console.log(error))
-        } else {
-            displayUnsuccesfulPlaylistToast()
+        if(allowPlaylistCreation) {
+            if (trackList != 0) {
+                fetch('https://api.spotify.com/v1/users/' + userId + '/playlists', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + access_token,
+                        'content-type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "name": month + ' ' + year + ' top songs',
+                        "description": 'The top songs in my song library from a specific month.',
+                        "public": true
+                    })
+                }).then(response => {
+                    console.log(response)
+                    return response.json()
+                }).then(data => {
+                    addSongsToPlaylist(data.id)
+                }).catch(error => console.log(error))
+            } else {
+                displayUnsuccesfulPlaylistToast()
+            }
         }
+
     }
 
     // function uploadTracksToPlaylist() {

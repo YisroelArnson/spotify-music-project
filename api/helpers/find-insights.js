@@ -1,18 +1,20 @@
+var mongoose = require('mongoose')
 const Track = require('../models/tracks');
-const Insight = require('../models/insights');
+const createInsightObj = require('../helpers/create-insights-doc');
 module.exports = (count) => {
 // Loop through tracks and create dictionaries of data listed in Notion
-    console.log("req.count: " + count);
+    console.log("Finding insights...");
 
-    let insight_doc = new Insight({
-        total_number_songs: count,
-        pop_song: {}
-    })
-    
-    let artist_dict = {}
-    let category_dict = {}
-    let year_dict = {}
+    var total_song_count = count;
+    var pop_song = {};
+    var pop_artists = {};
+    var pop_genres = {};
+    var pop_year_release = {};
+
     let largest_frequency = 0;
+    let artist_dict = {}
+    let genre_dict = {}
+    let year_dict = {}
     
 
     Track.find({} , (err, tracks) => {
@@ -25,7 +27,7 @@ module.exports = (count) => {
             //find most popular song with frequency attribute
             if(track.frequency > largest_frequency) {
                 largest_frequency = track.frequency
-                insight_doc.pop_song = track
+                pop_song = track
             }
 
             //create dictionary of artists
@@ -38,19 +40,43 @@ module.exports = (count) => {
                 }
             }
 
+            //create dictionary for genres
+            for(let i = 0; i < track.genres.length; i++) {
+                if(track.genres[i] in genre_dict) {
+                    genre_dict[track.genres[i]] = genre_dict[track.genres[i]] + 1;
+                } else {
+                    genre_dict[track.genres[i]] = 1;
+                }
+            }
+
+            //create dictionary for years
+            if(track.release_date.split("-",1) in year_dict) {
+                year_dict[track.release_date.split("-",1)] = year_dict[track.release_date.split("-",1)] + 1;
+            } else {
+                year_dict[track.release_date.split("-",1)] = 1;
+            }
+
         })
-        //find most popular artists
-        const getMax = object => {
-            return Object.keys(object).filter(x => {
-                 return object[x] == Math.max.apply(null, 
-                 Object.values(object));
-           });
+        const pickHighest = (obj, num = 1) => {
+            const requiredObj = {};
+            if(num > Object.keys(obj).length){
+               return false;
+            };
+            Object.keys(obj).sort((a, b) => obj[b] - obj[a]).forEach((key, ind) =>
+            {
+               if(ind < num){
+                  requiredObj[key] = obj[key];
+               }
+            });
+            return requiredObj;
         };
 
-        let most_pop_artists_arr = getMax(artist_dict)
-        insight_doc.pop_artists = most_pop_artists_arr
-    })
-    
+        pop_artists = pickHighest(artist_dict, 10)
+        pop_genres = pickHighest(genre_dict, 10)
+        pop_year_release = pickHighest(year_dict, 12)
 
-//When done with dictionaries send to helper function Create-insights-document
+        createInsightObj(total_song_count, pop_song, pop_artists, pop_genres, pop_year_release)
+
+        console.log('New insights saved...')
+    })
 }
