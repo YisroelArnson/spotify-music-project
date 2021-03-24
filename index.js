@@ -8,9 +8,7 @@ var bodyParser = require('body-parser');
 let port = process.env.PORT || 5000;
 
 mongoose.connect(
-  'mongodb+srv://yisroel:' +
-      process.env.MONGO_ATLAS_PW +
-      '@mmo-lz2qz.mongodb.net/spotify-music?retryWrites=true&w=majority',
+  process.env.MONGODB_URI,
   { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
 );
 
