@@ -1,4 +1,5 @@
 var request = require('request');
+var getClientToken = require('../helpers/get-client-token');
 
 exports.spotify_login = (req, res) => {
     var baseUrl;
@@ -50,4 +51,9 @@ exports.get_access_token = (req, res) => {
         console.log(error)
     }
     });
+}
+
+exports.get_fetch_access_token = async (req, res) => {
+    const accessTokenData = await getClientToken()
+    res.send(accessTokenData)
 }

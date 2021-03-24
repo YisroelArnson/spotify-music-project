@@ -23,11 +23,13 @@ app.use(express.static("public"))
 const authRoutes = require('./api/routes/auth');
 const playlistRoutes = require('./api/routes/playlist');
 const tracksRoutes = require('./api/routes/track');
+const insightsRoutes = require('./api/routes/insight');
 
 
 app.use('/auth', authRoutes);
 app.use('/playlist', playlistRoutes);
 app.use('/tracks', tracksRoutes)
+app.use('/insights', insightsRoutes)
 
 
 app.get("/", function(req, res) {
