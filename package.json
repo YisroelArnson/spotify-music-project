@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "serve": "nodemon server.js"
   },
   "author": "Yisroel Arnson",
   "license": "ISC",
@@ -17,7 +18,7 @@
     "express": "^4.17.1",
     "mongoose": "^5.11.18",
     "node-fetch": "^2.6.1",
-    "nodemon": "^2.0.7",
+    "nodemon": "^2.0.12",
     "request": "^2.88.2"
   },
   "engines": {

@@ -1,0 +1,44 @@
+body {
+    font-family: futura-pt, sans-serif !important;
+}
+
+#content-section {
+    display: none;
+}
+
+.banner {
+    background-color: #FFFD80;
+    min-height: 600px;
+    padding-left: 140px;
+    padding-right: 0;
+}
+
+#banner-title {
+    font-weight: 500;
+    font-size: 8rem;
+    padding-left: 160px;
+    padding-top: 50px;
+}
+
+#banner-subtitle {
+    font-weight: 500;
+    padding-left: 160px;
+    margin-bottom: 50px;
+}
+
+#record-svg {
+    margin: 3rem 10rem;
+    opacity: 0.6;
+}
+
+#banner-box {
+    position: relative;
+    background-color: #FFFF6D;
+    width: 80%;
+    padding: 30px 40px;
+    bottom: -60px;
+}
+
+#banner-box h1 {
+    font-weight: 500;
+}
