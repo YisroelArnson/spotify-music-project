@@ -9,6 +9,7 @@ async function onLoad() {
     insight = await fetchInsight()
     console.log('Insight fetched: ' + insight)
     // displayContentSection()
+    console.log(insight)
     displayInsight(insight)
     displaySongCount(insight)
     //Fetch access token so that I can fetch the popular song using the ID I got from insight
@@ -20,7 +21,10 @@ async function onLoad() {
     console.log("Fetching pop_song")
     popSong = await fetchPopSong()
     console.log("Pop_song fetched: " + popSong)
-    displayPopSong(popSong)
+    console.log(popSong)
+    // displayPopSong(popSong) DELETE SOON
+    displayTopSong(insight)
+    displayTopGenres(insight)
 }
 
 async function fetchInsight() {
@@ -73,6 +77,42 @@ function displaySongCount(insightData) {
     var num = insightData.total_song_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     document.getElementById('song-count-text').innerHTML = num;
 }
+
+function displayTopSong(insightData) {
+    document.getElementById('top-song-title').innerHTML = insightData.pop_song.song_name.substring(0, 10);
+    document.getElementById('top-song-artist').innerHTML = insightData.pop_song.artists[0].name;
+    document.getElementById('top-song-genres').innerHTML = toTitleCase(insightData.pop_song.genres.join(", "));
+    document.getElementById('top-song-popularity').innerHTML = insightData.pop_song.popularity + " / 100";
+}
+
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function(txt){
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
+
+function displayTopGenres(insightData) {
+    const pickHighest = (obj, num = 3) => {
+        const requiredObj = {};
+        if(num > Object.keys(obj).length){
+           return false;
+        };
+        Object.keys(obj).sort((a, b) => obj[b] - obj[a]).forEach((key, ind) =>
+        {
+           if(ind < num){
+              requiredObj[key] = obj[key];
+           }
+        });
+        return requiredObj;
+     };
+    let topGenres = pickHighest(insight.pop_genres, 3);
+    let topGenresStr = Object.keys(topGenres).join(", ");
+
+
+
+    document.getElementById('top-category-genres').innerHTML = toTitleCase(topGenresStr);
+}
+
 
 function displayPopSong(PopSongData) {
     document.getElementById('pop-song').innerHTML = JSON.stringify(PopSongData);
