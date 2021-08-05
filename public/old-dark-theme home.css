@@ -1,0 +1,154 @@
+body {
+  font-family: muli, sans-serif !important;
+  background-color: #000;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+#content-section {
+  display: none;
+}
+
+/* Fonts */
+h1 {
+  font-size: 80px;
+  font-weight: 800;
+  font-style: normal;
+}
+
+h2 {
+  font-size: 60px;
+  font-weight: 700;
+  font-style: normal;
+}
+
+h3 {
+  font-size: 30px;
+  font-weight: 700;
+  font-style: normal;
+}
+
+h4 {
+  font-size: 22px;
+  font-weight: 700;
+  font-style: normal;
+}
+
+h5 {
+  font-size: 18px;
+  font-weight: 300;
+  font-style: normal;
+}
+
+h6 {
+  font-size: 14px;
+  font-weight: 300;
+  font-style: normal;
+}
+/* Fonts */
+.container {
+  min-width: 1364px;
+}
+
+.banner {
+  min-height: 600px;
+  margin-top: 200px;
+  display: flex;
+}
+
+#banner-text h1 {
+  margin-bottom: 25px;
+}
+
+#banner-text h4:first-of-type {
+  margin-bottom: 75px;
+  width: 80%;
+}
+
+#song-count-container {
+  width: 100%;
+}
+
+#song-count-box {
+  float: right;
+  color: #000;
+  background-color: #fffd80;
+  border-radius: 45px;
+  padding: 75px 75px 75px 35px;
+  width: 433px;
+  height: 388px;
+  box-shadow: 15px 15px 0 rgba(179, 177, 72, 0.6);
+}
+
+#song-count-box h5 {
+  margin-bottom: 60px;
+}
+
+#song-count-box h1 {
+  text-align: center;
+}
+
+/* info blocks */
+#info-blocks-container {
+  max-height: 433px;
+  display: flex;
+  justify-content: center;
+}
+.info-blocks {
+  width: 433px;
+  height: 433px;
+  border-radius: 45px;
+  overflow-x: hidden;
+  margin-right: 30px;
+  padding-right: 50px;
+  transition: width 0.5s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-blocks:hover {
+  width: 1500px;
+}
+
+#top-song-block {
+  background-color: #ffa880;
+}
+
+#top-artist-block {
+  background-color: #80acff;
+}
+
+#top-category-block {
+  background-color: #a880ff;
+}
+
+.cut-off-text {
+  font-size: 225px;
+  margin-top: -20px;
+  margin-left: -60px;
+}
+
+.info-blocks .info-blocks-sub-title {
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.info-blocks-title-section {
+  width: 433px;
+  margin-right: 100px;
+}
+
+.info-blocks-data-container {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.info-blocks-data-title {
+  text-shadow: 3px -3px rgba(255, 255, 255, 0.6);
+  width: 50%;
+}
+
+/* info blocks */

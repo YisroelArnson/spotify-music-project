@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.typekit.net/zxy0kqx.css">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" -->
+        <!-- integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
+    <title>Discover</title>
+</head>
+
+<body>
+    <style>
+        html,
+        body {
+        height: 100%;
+        }
+        body {
+        background-color: #292929;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        }
+        .wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-rows: repeat(auto-fit, minmax(50%, 1fr));
+            grid-gap: 2px;
+        }
+        .wrapper > div {
+            min-height: 300px;
+            background-color: #161616;
+            color: #eee
+        }
+
+        .box-2 {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+        .box-3 {
+            grid-row: span 2;
+        }
+    </style>
+
+    
+    <div class="wrapper">
+        <div class="box-1">box 1</div>
+        <div class="box-2">box 2</div>
+        <div class="box-3">box 3</div>
+        <div class="box-4">box 4</div>
+        <div class="box-5">box 5</div>
+        <div class="box-6">box 6</div>
+        <div class="box-7">box 7</div>
+    </div>
+
+</body>
+
+</html>
