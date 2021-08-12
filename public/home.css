@@ -195,8 +195,8 @@ h10 {
 .box-2 .container {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  padding: clamp(4em, 3vw, 5em) clamp(1em, 3vw, 8em);
+  justify-content: space-between;
+  padding: clamp(4em, 3vw, 5em) clamp(1em, 3.5vw, 6em);
 }
 
 .box-2 .flex-box {
@@ -210,12 +210,44 @@ h10 {
 .box-2 .top-song-img {
   width: clamp(250px, 18vw, 400px);
 }
+/* 3333333333333333333333333 */
 
 .box-3 {
   grid-column: 1;
   grid-row: 2 / 5;
 }
 
+.box-3 .container {
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+  padding-bottom: 0;
+}
+
+.box-3 h2 {
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.box-3 h10 {
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.box-3 .song-table-container {
+  margin-top: 50px;
+}
+.box-3 .song-table-row {
+  margin: 15px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.box-3 .song-table-row h9 {
+  margin-right: 40px;
+}
+
+/* 333333333333333333333 */
 /* 444444444444444444444 */
 .box-4 {
   grid-column: 2;
@@ -301,9 +333,6 @@ h10 {
     grid-template-rows: 1fr 0.5fr 0.5fr 1fr;
   }
 
-  .box {
-  }
-
   .box-1 {
     grid-column: 1;
     grid-row: 4;
@@ -314,9 +343,23 @@ h10 {
     grid-row: 1;
   }
 
+  .box-2 .container {
+    justify-content: space-around;
+  }
+
   .box-3 {
     grid-column: 2/5;
     grid-row: 4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .box-3 .container {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: center;
   }
 
   .box-4 {
