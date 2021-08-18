@@ -1,367 +1,61 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-
-<!-- 
-
-    !Add in a max number of calls allowed. Display "Songs not found" if that max call is reached
-
-    Add search specificity up to a single day.
-
-    !Add ability to remove songs from the playlist before creating it
-
-    Add functionality to add all songs from liked library to a playlist
-
-    Figure out if I can get data about most listened to songs.
-
- -->
-
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://use.typekit.net/zxy0kqx.css">
-    <link rel="stylesheet" href="./style.css">
-    <title>Spotify Playlist Creator</title>
-</head>
-
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://use.typekit.net/zxy0kqx.css">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="universal.css">
+        <title>Playlist Creator</title>
+    </head>
 <body>
-
-    <div class="toast succesful-toast-bg playlist-succesful-toast" role="alert" aria-live="assertive" aria-atomic="true"
-        style="position: fixed; top: 0; right: 0;">
-        <div class="toast-body">
-            Playlist created! Check your spotify!
+    <div id="wrapper">
+        <div class="section" id="left-sidebar">
+            <div class="container">
+                <h3>people's <br/> music</h3>
+                <div class="button">
+                    <div class="button-icon"><img src="assets/icons/explore icon.svg" alt=""></div>
+                    <h5>Explore</h5>
+                </div>
+                <div class="line"></div>
+                <div class="button">
+                    <div class="button-icon"><img src="assets/icons/month icon.svg" alt=""></div>
+                    <h5>Monthly</h5>
+                </div>
+                <div class="button button-active">
+                    <div class="button-icon"><img src="assets/icons/month range icon.svg" alt=""></div>
+                    <h5>Range of Months</h5>
+                </div>
+                <div class="button">
+                    <div class="button-icon"><img src="assets/icons/all time icon.svg" alt=""></div>
+                    <h5>All time</h5>
+                </div>
+            </div>
+        </div>
+        <div class="section" id="middle-section">
+            <div id="inputs-container">
+                <div>
+                    <div class="inputs-row">
+                        <input type="text" placeholder="Start date">
+                        <input type="text" placeholder="End date">
+                        <div class="button button-dark"><img src="assets/icons/search icon.svg" alt=""></div>
+                    </div>
+                    <div class="inputs-row">
+                        <input type="text" placeholder="Playlist name">
+                        <div class="button button-dark"><img src="assets/icons/plus icon.svg" alt=""></div>
+                    </div>
+                </div>
+            </div>
+            <div id="song-listing-container"></div>
+        </div>
+        <div class="section" id="right-sidebar">
+            <div id="statistic-container"></div>
+            <div id="play-container"></div>
         </div>
     </div>
+   
 
-    <div class="toast unsuccesful-toast-bg no-songs-found-toast" role="alert" aria-live="assertive" aria-atomic="true"
-        style="position: fixed; top: 0; right: 0;">
-        <div class="toast-body">
-            No songs added for this date range.
-        </div>
-    </div>
-
-    <div class="toast unsuccesful-toast-bg playlist-unsuccesful-toast" role="alert" aria-live="assertive" aria-atomic="true"
-        style="position: fixed; top: 0; right: 0;">
-        <div class="toast-body">
-            Search for tracks before creating a playlist.
-        </div>
-    </div>
-
-    <div class="toast unsuccesful-toast-bg error-toast" role="alert" aria-live="assertive" aria-atomic="true"
-        style="position: fixed; top: 0; right: 0;">
-        <div class="toast-body">
-            An error occured.
-        </div>
-    </div>
-
-    <div class="jumbotron mb-0 pb-4" id="main-banner">
-        <div class="container" id="banner-container">
-            <h1 id="banner-title" class="muli-bold">REDISCOVER OLD FAVORITES!</h1>
-            <h4 id="banner-sub-text" class="w-50 my-4 line-height-def">This is a tool that allows you to create Spotify playlists of songs you added
-                from a specific time.
-            </h4>
-            <a class="btn btn-lg mt-3 mb-3 muli-bold" id="banner-button" href="#" role="button"><i style="font-size:20px" class="fa mr-2">&#xf04b;</i>
-                Discover
-            </a>
-            <div class="row" id="filter-container">
-                <div class="filter-buttons muli-bold lead filter-buttons-selected" onClick="changeSearchFilter('month', 0)">
-                    Monthly
-                </div>
-                <div class="filter-buttons muli-bold lead" onClick="changeSearchFilter('range', 1)">
-                    Range of Months
-                </div>
-                <div class="filter-buttons muli-bold lead" onClick="changeSearchFilter('all-time', 2)">
-                    All Time
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="row justify-content-center">
-        </div>
-        <div class="row my-4 align-items-center" id="end-date-inputs-row">
-            <h6 id="end-indic" class="pt-3 mr-1 text-muted">from</h6>
-            <div class="col">
-                <select class="form-control" onChange="getEndMonthVal()" id="end-month-list">
-                    <option>Jan</option>
-                    <option>Feb</option>
-                    <option>Mar</option>
-                    <option>Apr</option>
-                    <option>May</option>
-                    <option>Jun</option>
-                    <option>Jul</option>
-                    <option>Aug</option>
-                    <option>Sep</option>
-                    <option>Oct</option>
-                    <option>Nov</option>
-                    <option>Dec</option>
-                </select>
-            </div>
-            <div class="col">
-                <select class="form-control" onChange="getEndYearVal()" id="end-year-list">
-                    <option>2021</option>
-                    <option selected="selected">2020</option>
-                    <option>2019</option>
-                    <option>2018</option>
-                    <option>2017</option>
-                    <option>2016</option>
-                    <option>2015</option>
-                    <option>2014</option>
-                    <option>2013</option>
-                    <option>2012</option>
-                    <option>2011</option>
-                    <option>2010</option>
-                </select>
-            </div>
-        </div>
-        <div class="row my-4" id="start-date-inputs-row"> 
-            <h6 id="start-indic" class="pt-3 mr-1 text-muted">to  </h6>
-            <div class="col">
-                <select class="form-control" onChange="getMonthVal()" id="month-list">
-                    <option>Jan</option>
-                    <option>Feb</option>
-                    <option>Mar</option>
-                    <option>Apr</option>
-                    <option>May</option>
-                    <option>Jun</option>
-                    <option>Jul</option>
-                    <option>Aug</option>
-                    <option>Sep</option>
-                    <option>Oct</option>
-                    <option>Nov</option>
-                    <option>Dec</option>
-                </select>
-            </div>
-            <div class="col">
-                <select class="form-control" onChange="getYearVal()" id="year-list">
-                    <option>2021</option>
-                    <option>2020</option>
-                    <option>2019</option>
-                    <option>2018</option>
-                    <option>2017</option>
-                    <option>2016</option>
-                    <option>2015</option>
-                    <option>2014</option>
-                    <option>2013</option>
-                    <option>2012</option>
-                    <option>2011</option>
-                    <option>2010</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="row justify-content-center my-2">
-            <button class="activation-buttons" id="search-songs-button" onClick="manageSearchFunction()">
-                Search
-            </button>
-            <button class="activation-buttons" id="playlist-button" onClick="getUserInfo()">Create playlist</button>
-        </div>
-
-        <div id="song-list-container" class="mt-3">
-            <div class="row align-items-center">
-                <h3>Results</h3>
-                <h5 id="song-count-element" class="text-muted mx-4">0</h5>
-            </div>
-            <!-- <div class="row">
-                <div class="col-1">
-                </div>
-                <div class="col-5">
-                    <p class="text-muted">Track Name</p>
-                </div>
-                <div class="col-3">
-                    <p class="text-muted">Artist</p>
-                </div>
-                <div class="col-2">
-                </div>
-            </div>
-        </div> -->
-
-            <div id="results-container">
-                <div class="row placeholder-listing-body justify-content-between align-items-center my-3 px-4  ${song.track.id}">
-                    <div class="row align-items-center">
-                        <div class="col-1">
-                            <h6 class="align-self-center text-muted"></h6>
-                        </div>
-                        <div class="col-1">
-                            <a class="mx-2" target=_blank>
-                                <div class="placeholder-image mx-2 align-self-center"></div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col-4">
-                        <a class="mx-2" target=_blank>
-                        </a>
-                    </div>
-                    <div class="col-4">
-                        <a class="mx-2" target=_blank>
-                            <h7></h7>
-                        </a>
-                    </div>
-                    <div class="col-2">
-                        <button class="x-song-button float-right">
-                        </button>
-                    </div>
-                </div>
-                <div class="row placeholder-listing-body justify-content-between align-items-center my-3 px-4  ${song.track.id}">
-                    <div class="row align-items-center">
-                        <div class="col-1">
-                            <h6 class="align-self-center text-muted"></h6>
-                        </div>
-                        <div class="col-1">
-                            <a class="mx-2" target=_blank>
-                                <div class="placeholder-image mx-2 align-self-center"></div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col-4">
-                        <a class="mx-2" target=_blank>
-                        </a>
-                    </div>
-                    <div class="col-4">
-                        <a class="mx-2" target=_blank>
-                            <h7></h7>
-                        </a>
-                    </div>
-                    <div class="col-2">
-                        <button class="x-song-button float-right">
-                        </button>
-                    </div>
-                </div>
-                <div class="row placeholder-listing-body justify-content-between align-items-center my-3 px-4  ${song.track.id}">
-                    <div class="row align-items-center">
-                        <div class="col-1">
-                            <h6 class="align-self-center text-muted"></h6>
-                        </div>
-                        <div class="col-1">
-                            <a class="mx-2" target=_blank>
-                                <div class="placeholder-image mx-2 align-self-center"></div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col-4">
-                        <a class="mx-2" target=_blank>
-                        </a>
-                    </div>
-                    <div class="col-4">
-                        <a class="mx-2" target=_blank>
-                            <h7></h7>
-                        </a>
-                    </div>
-                    <div class="col-2">
-                        <button class="x-song-button float-right">
-                        </button>
-                    </div>
-                </div>
-                <div class="row placeholder-listing-body justify-content-between align-items-center my-3 px-4  ${song.track.id}">
-                    <div class="row align-items-center">
-                        <div class="col-1">
-                            <h6 class="align-self-center text-muted"></h6>
-                        </div>
-                        <div class="col-1">
-                            <a class="mx-2" target=_blank>
-                                <div class="placeholder-image mx-2 align-self-center"></div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col-4">
-                        <a class="mx-2" target=_blank>
-                        </a>
-                    </div>
-                    <div class="col-4">
-                        <a class="mx-2" target=_blank>
-                            <h7></h7>
-                        </a>
-                    </div>
-                    <div class="col-2">
-                        <button class="x-song-button float-right">
-                        </button>
-                    </div>
-                </div>
-                <div class="row placeholder-listing-body justify-content-between align-items-center my-3 px-4  ${song.track.id}">
-                    <div class="row align-items-center">
-                        <div class="col-1">
-                            <h6 class="align-self-center text-muted"></h6>
-                        </div>
-                        <div class="col-1">
-                            <a class="mx-2" target=_blank>
-                                <div class="placeholder-image mx-2 align-self-center"></div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col-4">
-                        <a class="mx-2" target=_blank>
-                        </a>
-                    </div>
-                    <div class="col-4">
-                        <a class="mx-2" target=_blank>
-                            <h7></h7>
-                        </a>
-                    </div>
-                    <div class="col-2">
-                        <button class="x-song-button float-right">
-                        </button>
-                    </div>
-                </div>
-                <div class="row placeholder-listing-body justify-content-between align-items-center my-3 px-4  ${song.track.id}">
-                    <div class="row align-items-center">
-                        <div class="col-1">
-                            <h6 class="align-self-center text-muted"></h6>
-                        </div>
-                        <div class="col-1">
-                            <a class="mx-2" target=_blank>
-                                <div class="placeholder-image mx-2 align-self-center"></div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col-4">
-                        <a class="mx-2" target=_blank>
-                        </a>
-                    </div>
-                    <div class="col-4">
-                        <a class="mx-2" target=_blank>
-                            <h7></h7>
-                        </a>
-                    </div>
-                    <div class="col-2">
-                        <button class="x-song-button float-right">
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row justify-content-center my-2">
-            <button class="activation-buttons" id="search-songs-button" onClick="displaySongListings()">
-                Load 50 more
-            </button>
-        </div>
-
-
-
-
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
-        </script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
-        </script>
-        <script src="./main.js"></script>
 
 </body>
-
 </html>
