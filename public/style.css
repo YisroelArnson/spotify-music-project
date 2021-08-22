@@ -185,7 +185,41 @@ input {
 
 .stat-box h2, .stat-box h10 {
     margin: 0;
+    text-align: center;
 }
+
+
+#player-container {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+#song-player-image {
+    width: 132px;
+    height: 132px;
+    border-radius: 5px;
+    background-color: #292929;
+    margin: 50px 0 30px 0;
+}
+
+#music-controller-container {
+    width: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: space-around;
+    margin-top: 25px;
+}
+
+#music-controller-container img {
+    cursor: pointer;
+}
+
+
+
 
 @media only screen and (max-width: 1200px) {
     #left-sidebar {
