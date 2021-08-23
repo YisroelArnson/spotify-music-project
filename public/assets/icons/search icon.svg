@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <g id="search_icon" data-name="search icon" transform="translate(-0.094 -0.095)">
+    <g id="invisible_box" data-name="invisible box" transform="translate(0.061 0.061)">
+      <rect id="Rectangle_74" data-name="Rectangle 74" width="36" height="36" transform="translate(0.033 0.034)" fill="none"/>
+    </g>
+    <g id="icons_Q2" data-name="icons Q2" transform="translate(2.6 2.866)">
+      <path id="Path_21" data-name="Path 21" d="M24.3,22.263a11.227,11.227,0,0,0,2.276-8.268A11.53,11.53,0,0,0,16.11,3.982a11.4,11.4,0,0,0-2.276,22.681,11.606,11.606,0,0,0,8.344-2.2l9.482,9.406a1.441,1.441,0,0,0,2.124,0h0a1.441,1.441,0,0,0,0-2.124Zm-7.662,1.365a8.344,8.344,0,0,1-9.558-9.71,8.193,8.193,0,0,1,6.751-6.751A8.268,8.268,0,0,1,23.468,16.8a8.42,8.42,0,0,1-6.827,6.827Z" transform="translate(-3.574 -3.924)" fill="#fff"/>
+    </g>
+  </g>
+</svg>
