@@ -46,11 +46,10 @@ input {
     color: #fff;
 }
 
-
 #left-sidebar {
     height: 100%;
     width: 20%;
-    border-right: 1px solid #e7e7e7;
+    /* border-right: 1px solid #e7e7e7; */
 }
 
 #left-sidebar .container {
@@ -79,18 +78,22 @@ input {
 }
 
 #middle-section {
-    height: 100%;
     width: 60%;
+    height: 100vh;
+    box-sizing: border-box;
+    border-left: 1px solid #e7e7e7;
+    border-right: 1px solid #e7e7e7;
 }
 
 
 #inputs-container {
-    min-height: 30%;
+    box-sizing: border-box;
+    min-height: 30vh;
     border-bottom: 1px solid #e7e7e7;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0 clamp(15px, 10vw, 80px);
+    padding: 40px clamp(15px, 10vw, 80px);
 }
 
 #inputs-container .inputs-row {
@@ -102,7 +105,8 @@ input {
 }
 
 #song-listing-container {
-    min-height: 70%;
+    height: 70vh;
+    overflow-y: scroll;
     padding: 15px clamp(15px, 10vw, 80px);
     box-sizing: border-box;
 }
@@ -159,7 +163,7 @@ input {
 #right-sidebar {
     height: 100%;
     width: 20%;
-    border-left: 1px solid #e7e7e7;
+    /* border-left: 1px solid #e7e7e7; */
 }
 #statistic-container {
     height: 50%;
@@ -220,6 +224,28 @@ input {
 
 
 
+@media only screen and (min-width: 1200px) {
+    
+::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #e7e7e7; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #292929; 
+}
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+}
+
 
 @media only screen and (max-width: 1200px) {
     #left-sidebar {
@@ -256,6 +282,7 @@ input {
 
     #middle-section {
         width: 100%;
+        height: unset;
     }
     
     #inputs-container input, #inputs-container .button {
@@ -287,19 +314,29 @@ input {
     }
 
     #song-listing-container {
-        min-height: 70%;
         padding: 15px 0;
+        height: 50vh;
     }
 
 
     #right-sidebar {
         display: flex;
+        width: 100%;
+        border-top: 1px solid #e7e7e7;
+        border-left: none;
     }
-    #right-sidebar #play-container {
-        display: none;
+
+    #statistic-container {
+        height: 100%;
     }
     
+    .stat-box-divider {
+        height: 100%;
+    }
 
+    #right-sidebar #player-container {
+        display: none;
+    }
 }
 
 @media only screen and (max-width: 500px) {
