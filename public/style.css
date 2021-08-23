@@ -163,7 +163,7 @@ input {
 #right-sidebar {
     height: 100%;
     width: 20%;
-    /* border-left: 1px solid #e7e7e7; */
+    z-index: 100;
 }
 #statistic-container {
     height: 50%;
