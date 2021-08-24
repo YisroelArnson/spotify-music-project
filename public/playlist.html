@@ -14,20 +14,22 @@
         <div class="section" id="left-sidebar">
             <div class="container">
                 <h3>people's <br/> music</h3>
-                <div class="button">
-                    <div class="button-icon"><img src="assets/icons/explore icon.svg" alt=""></div>
-                    <h5>Explore</h5>
-                </div>
-                <div class="line"></div>
-                <div class="button">
+                <a href="/public/index.html">
+                    <div class="button">
+                        <div class="button-icon"><img src="assets/icons/explore icon.svg" alt=""></div>
+                        <h5>Explore</h5>
+                   </div>
+                </a>
+            <div class="line"></div>
+                <div id="month-button" onClick="navBarSelectDetector('month')" class="button button-active">
                     <div class="button-icon"><img src="assets/icons/month icon.svg" alt=""></div>
                     <h5>Monthly</h5>
                 </div>
-                <div class="button button-active">
+                <div id="range-button" onClick="navBarSelectDetector('range')" class="button">
                     <div class="button-icon"><img src="assets/icons/month range icon.svg" alt=""></div>
                     <h5>Range of Months</h5>
                 </div>
-                <div class="button">
+                <div id="all-time-button" onClick="navBarSelectDetector('all-time')" class="button">
                     <div class="button-icon"><img src="assets/icons/all time icon.svg" alt=""></div>
                     <h5>All time</h5>
                 </div>
@@ -36,8 +38,101 @@
         <div class="section" id="middle-section">
             <div id="inputs-container">
                     <div id="search-input-row" class="inputs-row">
-                        <input type="text" placeholder="Start date">
-                        <input type="text" placeholder="End date">
+                        <!-- month selectors -->
+                        <select class="select-element month-select-groups" onChange="" id="start-month-list">
+                            <option selected hidden>Start month</option>
+                            <option>Jan</option>
+                            <option>Feb</option>
+                            <option>Mar</option>
+                            <option>Apr</option>
+                            <option>May</option>
+                            <option>Jun</option>
+                            <option>Jul</option>
+                            <option>Aug</option>
+                            <option>Sep</option>
+                            <option>Oct</option>
+                            <option>Nov</option>
+                            <option>Dec</option>
+                        </select>
+                        <select class="select-element month-select-groups" onChange="" id="start-year-list">
+                            <option selected hidden>Start year</option>
+                            <option>2021</option>
+                            <option>2020</option>
+                            <option>2019</option>
+                            <option>2018</option>
+                            <option>2017</option>
+                            <option>2016</option>
+                            <option>2015</option>
+                            <option>2014</option>
+                            <option>2013</option>
+                            <option>2012</option>
+                            <option>2011</option>
+                            <option>2010</option>
+                        </select>
+                        <!-- range selectors -->
+                        <select class="select-element range-select-groups" onChange="" id="range-start-month-list">
+                            <option selected hidden>Start month</option>
+                            <option>Jan</option>
+                            <option>Feb</option>
+                            <option>Mar</option>
+                            <option>Apr</option>
+                            <option>May</option>
+                            <option>Jun</option>
+                            <option>Jul</option>
+                            <option>Aug</option>
+                            <option>Sep</option>
+                            <option>Oct</option>
+                            <option>Nov</option>
+                            <option>Dec</option>
+                        </select>
+                        <select class="select-element range-select-groups" onChange="" id="range-start-year-list">
+                            <option selected hidden>Start year</option>
+                            <option>2021</option>
+                            <option>2020</option>
+                            <option>2019</option>
+                            <option>2018</option>
+                            <option>2017</option>
+                            <option>2016</option>
+                            <option>2015</option>
+                            <option>2014</option>
+                            <option>2013</option>
+                            <option>2012</option>
+                            <option>2011</option>
+                            <option>2010</option>
+                        </select>
+                        <select class="select-element range-select-groups" onChange="" id="range-end-month-list">
+                            <option selected hidden>End month</option>
+                            <option>Jan</option>
+                            <option>Feb</option>
+                            <option>Mar</option>
+                            <option>Apr</option>
+                            <option>May</option>
+                            <option>Jun</option>
+                            <option>Jul</option>
+                            <option>Aug</option>
+                            <option>Sep</option>
+                            <option>Oct</option>
+                            <option>Nov</option>
+                            <option>Dec</option>
+                        </select>
+                        <select class="select-element range-select-groups" onChange="" idrange-="end-year-list">
+                            <option selected hidden>End year</option>
+                            <option>2021</option>
+                            <option>2020</option>
+                            <option>2019</option>
+                            <option>2018</option>
+                            <option>2017</option>
+                            <option>2016</option>
+                            <option>2015</option>
+                            <option>2014</option>
+                            <option>2013</option>
+                            <option>2012</option>
+                            <option>2011</option>
+                            <option>2010</option>
+                        </select>
+                        
+                        <!-- <input type="text" placeholder="Start date">
+                        <input type="text" placeholder="End date"> -->
                         <div id="search-button" class="button button-dark"><img src="assets/icons/search icon.svg" alt=""></div>
                     </div>
                     <div id="playlist-input-row" class="inputs-row">
@@ -185,7 +280,7 @@
         </div>
     </div>
    
-
+    <script src="./main.js"></script>
 
 </body>
 </html>
