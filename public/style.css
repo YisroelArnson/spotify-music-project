@@ -12,7 +12,7 @@ html, body {
 .button {
     border-radius: 5px;
     height: 63px;
-    width: 122px;
+    min-width: 122px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -26,14 +26,22 @@ html, body {
     background-color: #E1E1E1;
 }
 
-input {
+input, select {
     background-color: #F9F9F9;
     border-radius: 5px;
     border: none;
     height: 63px;
-    width: clamp(80px, 20vw, 260px);
+    width: clamp(100px, 20vw, 260px);
     outline: none;
     padding-left: 20px;
+}
+
+select {
+    width: clamp(120px, 8vw, 260px);
+}
+
+.range-select-groups {
+    display: none;
 }
 
 .button-active {
@@ -86,6 +94,7 @@ input {
 }
 
 
+
 #inputs-container {
     box-sizing: border-box;
     min-height: 30vh;
@@ -96,11 +105,12 @@ input {
     padding: 40px clamp(15px, 10vw, 80px);
 }
 
+
 #inputs-container .inputs-row {
     display: flex;
 }
 
-#inputs-container input, #inputs-container .button {
+#inputs-container input, #inputs-container .button, #inputs-container select {
     margin: 8px;
 }
 
@@ -159,6 +169,17 @@ input {
     cursor: pointer;
 }
 
+#loading-placeholder {
+    width: 60%;
+    margin: 2em 0;
+    background-color: #f2f3f9;
+    border-radius: 5px;
+}
+
+#loading-placeholder h3 {
+    color: #BCC5d6;
+    padding: 30px;
+}
 
 #right-sidebar {
     height: 100%;
@@ -303,6 +324,11 @@ input {
         flex-direction: column;
         width: 100%;
     }
+
+    #search-input-row select {
+        width: 100%;
+        margin: 8px 0;
+    }    
 
     #playlist-input-row input {
         width: 70%;
