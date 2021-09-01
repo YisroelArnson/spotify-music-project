@@ -169,6 +169,17 @@ select {
     cursor: pointer;
 }
 
+#loading-placeholder {
+    width: 60%;
+    margin: 2em 0;
+    background-color: #f2f3f9;
+    border-radius: 5px;
+}
+
+#loading-placeholder h3 {
+    color: #BCC5d6;
+    padding: 30px;
+}
 
 #right-sidebar {
     height: 100%;
