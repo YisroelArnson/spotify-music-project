@@ -40,7 +40,7 @@
                     <div id="search-input-row" class="inputs-row">
                         <!-- month selectors -->
                         <select class="select-element month-select-groups" onChange="setDateValues()" id="start-month-list">
-                            <option selected hidden>Start month</option>
+                            <option selected hidden>Month</option>
                             <option>Jan</option>
                             <option>Feb</option>
                             <option>Mar</option>
@@ -55,7 +55,7 @@
                             <option>Dec</option>
                         </select>
                         <select class="select-element month-select-groups" onChange="setDateValues()" id="start-year-list">
-                            <option selected hidden>Start year</option>
+                            <option selected hidden>Year</option>
                             <option>2021</option>
                             <option>2020</option>
                             <option>2019</option>
@@ -133,7 +133,7 @@
                         
                         <!-- <input type="text" placeholder="Start date">
                         <input type="text" placeholder="End date"> -->
-                        <div id="search-button" class="button button-dark"><img src="assets/icons/search icon.svg" alt=""></div>
+                        <div id="search-button" class="button button-dark" onClick="startSearch()"><img src="assets/icons/search icon.svg" alt=""></div>
                     </div>
                     <div id="playlist-input-row" class="inputs-row">
                         <input type="text" placeholder="Playlist name">

@@ -10,6 +10,8 @@ if(devMode) {
 var masterTrackList = [];
 var offset = 0;
 var access_token;
+var searchMode = "month";
+var finishedFetchingLikedSongs = false;
 
 function navBarSelectDetector(option) {
     document.getElementById('month-button').className = 'button'
@@ -20,6 +22,7 @@ function navBarSelectDetector(option) {
 
     document.getElementById(option+"-button").className = 'button button-active'
 
+    searchMode = option;
 
     var divsToHide = document.getElementsByClassName("select-element"); //divsToHide is an array
     for(var i = 0; i < divsToHide.length; i++){
@@ -33,16 +36,27 @@ function navBarSelectDetector(option) {
 
 function setDateValues() {
     //Month
-    monthStartMonth = document.getElementById("start-month-list").value;
-    monthEndYear = document.getElementById("start-year-list").value;
+    monthMonth = getMonthFromString(document.getElementById("start-month-list").value);
+    monthYear = document.getElementById("start-year-list").value;
     //Range
-    rangeStartMonth = document.getElementById("range-start-month-list").value;
+    rangeStartMonth = getMonthFromString(document.getElementById("range-start-month-list").value);
     rangeStartYear = document.getElementById("range-start-year-list").value;
 
-    rangeEndMonth = document.getElementById("range-end-month-list").value;
+    rangeEndMonth = getMonthFromString(document.getElementById("range-end-month-list").value);
     rangeEndYear = document.getElementById("range-end-year-list").value;
-    console.log("Month: " + monthStartMonth + "-" + monthEndYear)
-    console.log("Range: " + rangeStartMonth + "-" + rangeStartYear + ", " + rangeEndMonth + "-" + rangeEndYear)
+    // console.log("Month: " + monthMonth + "-" + monthYear)
+    // console.log("Range: " + rangeStartMonth + "-" + rangeStartYear + ", " + rangeEndMonth + "-" + rangeEndYear)
+    return ([monthMonth, monthYear, rangeStartMonth, rangeStartYear, rangeEndMonth, rangeEndYear])
+}
+
+function startSearch() {
+    if(searchMode == "month") {
+        filterSongsByMonth()
+    } else if(searchMode == "range") {
+        filterSongsByRange()
+    } else {
+        console.log("Searching in all time")
+    }
 }
 
 function getAccessToken() {
@@ -85,7 +99,7 @@ function fetchSongs(limit) {
                 'Authorization': 'Bearer ' + access_token
             }
         }).then(response => {
-            console.log(response)   
+            // console.log(response)   
             return response.json()  
         }).then(data => {
             return data
@@ -97,24 +111,67 @@ function getAllLikedSongs() {
     let likedSongsPlaylistCount = 0;
     //Start loading animation here
     fetchSongs(limit).then(data => {
-        if(likedSongsPlaylistCount = 0) {
-            likedSongsPlaylistCount = data.total;
-        }
+        likedSongsPlaylistCount = data.total;
         offset += limit;   
-        if(offset >= likedSongsPlaylistCount) {
+        if(masterTrackList.length != likedSongsPlaylistCount) {
             doneFetchingSongs = false;
-            lastLoadedDate = new Date(data.items[data.items.length - 1].added_at.split('-')[0], data.items[data.items.length - 1].added_at.split('-')[1], data.items[data.items.length - 1].added_at.split('-')[2].split('T')[0])
+            lastLoadedDate = new Date(data.items[data.items.length - 1].added_at.split('-')[0], data.items[data.items.length - 1].added_at.split('-')[1] - 1, data.items[data.items.length - 1].added_at.split('-')[2].split('T')[0])
             
-            console.log(lastLoadedDate)
+            // console.log(lastLoadedDate)
 
             masterTrackList = masterTrackList.concat(data.items)
             getAllLikedSongs();
         } else {
             console.log(masterTrackList)
+            finishedFetchingLikedSongs = true;
             //end loading animation here
         }
     }).catch(error => {
         console.log(error)
     })
+}
+
+function getMonthFromString(mon) {
+    var date = new Date(Date.parse(mon + " 1, 2012")).getMonth()
+    // if (("" + date).length == 1) {
+    //     return "0" + date;
+    // }
+    return date;
+}
+
+function filterSongsByMonth() {
+    //match up the dates from songs to the dates inputed by user. Ensure that they are comparable with == or > or <
+    // console.log(new Date(2021, 0, 1))
+    //go through the masterTrackList and check if songs have been added in that month-year, if yes add to var filteredSongs, if not move on.
+    //Display songs 50/filteredSongs.count    
+    if(finishedFetchingLikedSongs) {
+        let filteredSongs = [];
+        let dateValues = setDateValues();
+        for(let i = 0; i < masterTrackList.length; i++) {
+            let songDate = new Date(masterTrackList[i].added_at.split('-')[0], masterTrackList[i].added_at.split('-')[1] - 1, masterTrackList[i].added_at.split('-')[2].split('T')[0], 0, 0, 0, 0)
+            if(songDate.getUTCMonth() == dateValues[0] && songDate.getUTCFullYear() == dateValues[1]) {
+                filteredSongs.push(masterTrackList[i])
+                console.log(masterTrackList[i], "Song is in range")
+            }    
+        }
+        console.log(filteredSongs)        
+    }
+}
+
+function filterSongsByRange() {
+    //Requires two sets of dates and comparing if the song is between the two. So convert to miliseconds
+    let filteredSongs = [];
+    let dateValues = setDateValues();
+    let startDate = new Date (dateValues[3], dateValues[2], 1, 0, 0, 0, 0)
+    let endDate = new Date (dateValues[5], dateValues[4], 1, 0, 0, 0, 0)
+    for(let i = 0; i < masterTrackList.length; i++) {
+        let songDate = new Date(masterTrackList[i].added_at.split('-')[0], masterTrackList[i].added_at.split('-')[1] - 1, masterTrackList[i].added_at.split('-')[2].split('T')[0], 0, 0, 0, 0)
+        console.log(startDate.getTime(), endDate.getTime(), songDate.getTime())
+    
+        if(songDate.getTime() >= startDate.getTime() && songDate.getTime() <= endDate.getTime()) {
+            filteredSongs.push(masterTrackList[i])
+        }
+    }
+    console.log(filteredSongs);
 }
 
