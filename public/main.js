@@ -12,7 +12,9 @@ var offset = 0;
 var access_token;
 var searchMode = "month";
 var finishedFetchingLikedSongs = false;
-
+var displayedSongListingStart = 0;
+var amountSongListingAmount = 50;
+var currentDisplayedSongList = [];
 function navBarSelectDetector(option) {
     document.getElementById('month-button').className = 'button'
     document.getElementById('range-button').className = 'button'
@@ -49,7 +51,13 @@ function setDateValues() {
     return ([monthMonth, monthYear, rangeStartMonth, rangeStartYear, rangeEndMonth, rangeEndYear])
 }
 
+function clearSongListingContainer() {
+    displayedSongListingStart = 0;
+    document.getElementById("song-listing-container").innerHTML = ""
+}
+
 function startSearch() {
+    clearSongListingContainer()
     if(searchMode == "month") {
         filterSongsByMonth()
     } else if(searchMode == "range") {
@@ -117,7 +125,7 @@ function getAllLikedSongs() {
             doneFetchingSongs = false;
             lastLoadedDate = new Date(data.items[data.items.length - 1].added_at.split('-')[0], data.items[data.items.length - 1].added_at.split('-')[1] - 1, data.items[data.items.length - 1].added_at.split('-')[2].split('T')[0])
             
-            // console.log(lastLoadedDate)
+            console.log(lastLoadedDate)
 
             masterTrackList = masterTrackList.concat(data.items)
             getAllLikedSongs();
@@ -144,7 +152,7 @@ function filterSongsByMonth() {
     // console.log(new Date(2021, 0, 1))
     //go through the masterTrackList and check if songs have been added in that month-year, if yes add to var filteredSongs, if not move on.
     //Display songs 50/filteredSongs.count    
-    if(finishedFetchingLikedSongs) {
+    // if(finishedFetchingLikedSongs) {
         let filteredSongs = [];
         let dateValues = setDateValues();
         for(let i = 0; i < masterTrackList.length; i++) {
@@ -154,8 +162,9 @@ function filterSongsByMonth() {
                 console.log(masterTrackList[i], "Song is in range")
             }    
         }
-        console.log(filteredSongs)        
-    }
+        console.log(filteredSongs)     
+        displaySongs(filteredSongs)   
+    // }
 }
 
 function filterSongsByRange() {
@@ -166,12 +175,60 @@ function filterSongsByRange() {
     let endDate = new Date (dateValues[5], dateValues[4], 1, 0, 0, 0, 0)
     for(let i = 0; i < masterTrackList.length; i++) {
         let songDate = new Date(masterTrackList[i].added_at.split('-')[0], masterTrackList[i].added_at.split('-')[1] - 1, masterTrackList[i].added_at.split('-')[2].split('T')[0], 0, 0, 0, 0)
-        console.log(startDate.getTime(), endDate.getTime(), songDate.getTime())
     
         if(songDate.getTime() >= startDate.getTime() && songDate.getTime() <= endDate.getTime()) {
             filteredSongs.push(masterTrackList[i])
         }
     }
     console.log(filteredSongs);
+    displaySongs(filteredSongs)   
+}
+
+function filterByAllTime() {
+    if(finishedFetchingLikedSongs) {
+        displaySongs(masterTrackList)
+    }
+}
+
+function displaySongs(songList) {
+    //display first 50 songs
+    //Then when users scrolls to bottom of those songs, display 50 more, etc. If it gets too laggy with a lot of songs, then undisplay songs above the fold as users's scrool
+    currentDisplayedSongList = songList;
+    for(let i = displayedSongListingStart; i < (displayedSongListingStart + amountSongListingAmount); i++) {
+        if(i < songList.length) {
+            document.getElementById("song-listing-container").innerHTML +=
+            `
+            <div class="song-listing">
+                <h5 class="gray">${i+1}</h5>
+                <div class="song-image"><img src="${songList[i].track.album.images[2].url}"></div>
+                <div class="song-text-container">
+                        <h5 class="song-name bold">${songList[i].track.name}</h5>
+                        <h5 class="song-artist gray">${songList[i].track.artists[0].name}</h5>
+                </div>
+                <h5 class="song-albumn gray">${songList[i].track.album.name}</h5>
+                <div class="play-pause-button"><img src="assets/icons/play button.svg" alt=""></div>
+                <div class="shift-arrow-button"><img src="assets/icons/up arrow.svg" alt=""></div>
+            </div>
+            `
+        }
+    }
+    const elements = document.getElementsByClassName("add-songs-button-container");
+    while(elements.length > 0){
+        elements[0].parentNode.removeChild(elements[0]);
+    }
+
+    if((displayedSongListingStart + amountSongListingAmount) < songList.length) {
+        document.getElementById("song-listing-container").innerHTML +=
+        `
+        <div class="add-songs-button-container">
+            <button onClick="displayMoreSongs()" class="display-more-songs-button">+</button>
+        </div>
+        `
+    }
+}
+
+function displayMoreSongs() {
+    displayedSongListingStart += amountSongListingAmount;
+    displaySongs(currentDisplayedSongList)
 }
 
