@@ -1,6 +1,6 @@
 // Date selector functions
 //For this function to work, the class names and Ids must match this format. [month, range, all-time]-...
-var devMode = false;
+var devMode = true;
 if(devMode) {
     var baseUrl = "http://localhost:5000";
 } else {
@@ -171,13 +171,12 @@ function filterSongsByMonth() {
             let songDate = new Date(masterTrackList[i].added_at.split('-')[0], masterTrackList[i].added_at.split('-')[1] - 1, masterTrackList[i].added_at.split('-')[2].split('T')[0], 0, 0, 0, 0)
             if(songDate.getUTCMonth() == dateValues[0] && songDate.getUTCFullYear() == dateValues[1]) {
                 filteredSongs.push(masterTrackList[i])
-                console.log(masterTrackList[i], "Song is in range")
+                // console.log(masterTrackList[i], "Song is in range")
             }    
         }
         console.log(filteredSongs)     
         displaySongs(filteredSongs)   
         return filteredSongs;
-    // }
 }
 
 function filterSongsByRange() {
@@ -229,8 +228,7 @@ function displaySongs(songList) {
                                 <h5 class="song-artist gray">${artistList.join(", ")}</h5>
                         </div>
                         <h5 class="song-albumn gray">${songList[i].track.album.name}</h5>
-                        <div class="play-pause-button"><img src="assets/icons/play button.svg" alt=""></div>
-                        <div class="shift-arrow-button"><img src="assets/icons/up arrow.svg" alt=""></div>
+                        <a href="${songList[i].track.external_urls.spotify}" target="_blank"><div class="shift-arrow-button"><img src="assets/icons/up arrow.svg" alt=""></div></a>
                     </div>
                     `
                 }
