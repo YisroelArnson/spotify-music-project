@@ -172,6 +172,5 @@ function filterSongsByRange() {
             filteredSongs.push(masterTrackList[i])
         }
     }
-    console.log(filteredSongs);
 }
 
