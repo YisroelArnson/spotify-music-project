@@ -1,6 +1,6 @@
 // Date selector functions
 //For this function to work, the class names and Ids must match this format. [month, range, all-time]-...
-var devMode = false;
+var devMode = true;
 if(devMode) {
     var baseUrl = "http://localhost:5000";
 } else {
@@ -15,6 +15,7 @@ var finishedFetchingLikedSongs = false;
 var displayedSongListingStart = 0;
 var amountSongListingAmount = 50;
 var currentDisplayedSongList = [];
+
 function navBarSelectDetector(option) {
     document.getElementById('month-button').className = 'button'
     document.getElementById('range-button').className = 'button'
@@ -56,16 +57,26 @@ function clearSongListingContainer() {
     document.getElementById("song-listing-container").innerHTML = ""
 }
 
+function finishedLoadingSongsAnimation() {
+    document.getElementById('search-button').className = 'button button-dark'
+    document.getElementById('add-playlist-button').className = 'button button-dark'
+}
+
 function startSearch() {
-    clearSongListingContainer()
-    if(searchMode == "month") {
-        filterSongsByMonth()
-    } else if(searchMode == "range") {
-        filterSongsByRange()
-    } else {
-        console.log("Searching in all time")
+    let filteredSongs = [];
+    if(finishedFetchingLikedSongs) {
+        clearSongListingContainer()
+        if(searchMode == "month") {
+            filteredSongs = filterSongsByMonth()
+        } else if(searchMode == "range") {
+            filteredSongs = filterSongsByRange()
+        } else {
+            filteredSongs = filterSongsByAllTime()
+        }
+        displaySongsData(filteredSongs);
     }
 }
+
 
 function getAccessToken() {
     const queryString = window.location.search;
@@ -125,13 +136,14 @@ function getAllLikedSongs() {
             doneFetchingSongs = false;
             lastLoadedDate = new Date(data.items[data.items.length - 1].added_at.split('-')[0], data.items[data.items.length - 1].added_at.split('-')[1] - 1, data.items[data.items.length - 1].added_at.split('-')[2].split('T')[0])
             
-            console.log(lastLoadedDate)
+            // console.log(lastLoadedDate)
 
             masterTrackList = masterTrackList.concat(data.items)
             getAllLikedSongs();
         } else {
             console.log(masterTrackList)
             finishedFetchingLikedSongs = true;
+            finishedLoadingSongsAnimation();
             //end loading animation here
         }
     }).catch(error => {
@@ -164,6 +176,7 @@ function filterSongsByMonth() {
         }
         console.log(filteredSongs)     
         displaySongs(filteredSongs)   
+        return filteredSongs;
     // }
 }
 
@@ -182,49 +195,62 @@ function filterSongsByRange() {
     }
     console.log(filteredSongs);
     displaySongs(filteredSongs)   
+    return filteredSongs;
+
 }
 
-function filterByAllTime() {
-    if(finishedFetchingLikedSongs) {
-        displaySongs(masterTrackList)
-    }
+function filterSongsByAllTime() {
+    let filteredSongs = masterTrackList;
+    displaySongs(filteredSongs)
+    return filteredSongs;
+
 }
 
 function displaySongs(songList) {
     //display first 50 songs
     //Then when users scrolls to bottom of those songs, display 50 more, etc. If it gets too laggy with a lot of songs, then undisplay songs above the fold as users's scrool
     currentDisplayedSongList = songList;
-    for(let i = displayedSongListingStart; i < (displayedSongListingStart + amountSongListingAmount); i++) {
-        if(i < songList.length) {
+    if(songList.length > 0) {
+        for(let i = displayedSongListingStart; i < (displayedSongListingStart + amountSongListingAmount); i++) {
+            if(currentDisplayedSongList[i]) {
+                let artistList = [];
+                for(let j = 0; j < currentDisplayedSongList[i].track.artists.length; j++) {
+                    artistList.push(currentDisplayedSongList[i].track.artists[j].name)
+                }
+        
+                if(i < songList.length) {
+                    document.getElementById("song-listing-container").innerHTML +=
+                    `
+                    <div class="song-listing">
+                        <h5 class="gray">${i+1}</h5>
+                        <div class="song-image"><img src="${songList[i].track.album.images[2].url}"></div>
+                        <div class="song-text-container">
+                                <h5 class="song-name bold">${songList[i].track.name}</h5>
+                                <h5 class="song-artist gray">${artistList.join(", ")}</h5>
+                        </div>
+                        <h5 class="song-albumn gray">${songList[i].track.album.name}</h5>
+                        <div class="play-pause-button"><img src="assets/icons/play button.svg" alt=""></div>
+                        <div class="shift-arrow-button"><img src="assets/icons/up arrow.svg" alt=""></div>
+                    </div>
+                    `
+                }
+            }
+        }
+        const elements = document.getElementsByClassName("add-songs-button-container");
+        while(elements.length > 0){
+            elements[0].parentNode.removeChild(elements[0]);
+        }
+    
+        if((displayedSongListingStart + amountSongListingAmount) < songList.length) {
             document.getElementById("song-listing-container").innerHTML +=
             `
-            <div class="song-listing">
-                <h5 class="gray">${i+1}</h5>
-                <div class="song-image"><img src="${songList[i].track.album.images[2].url}"></div>
-                <div class="song-text-container">
-                        <h5 class="song-name bold">${songList[i].track.name}</h5>
-                        <h5 class="song-artist gray">${songList[i].track.artists[0].name}</h5>
-                </div>
-                <h5 class="song-albumn gray">${songList[i].track.album.name}</h5>
-                <div class="play-pause-button"><img src="assets/icons/play button.svg" alt=""></div>
-                <div class="shift-arrow-button"><img src="assets/icons/up arrow.svg" alt=""></div>
+            <div class="add-songs-button-container">
+                <button onClick="displayMoreSongs()" class="display-more-songs-button">+</button>
             </div>
             `
         }
     }
-    const elements = document.getElementsByClassName("add-songs-button-container");
-    while(elements.length > 0){
-        elements[0].parentNode.removeChild(elements[0]);
-    }
-
-    if((displayedSongListingStart + amountSongListingAmount) < songList.length) {
-        document.getElementById("song-listing-container").innerHTML +=
-        `
-        <div class="add-songs-button-container">
-            <button onClick="displayMoreSongs()" class="display-more-songs-button">+</button>
-        </div>
-        `
-    }
+    
 }
 
 function displayMoreSongs() {
@@ -232,3 +258,33 @@ function displayMoreSongs() {
     displaySongs(currentDisplayedSongList)
 }
 
+function getAverageOfList(list) {
+    let total = 0;
+    for(let i = 0; i < list.length; i++) {
+        total += parseInt(list[i])
+    }
+    return (total / list.length);
+}
+
+function displaySongsData(filteredSongs) {
+    //Count of unique artists
+    let artistList = [];
+    let releaseYearList = [];
+    let popularityList = [];
+    for(let i = 0; i < filteredSongs.length; i++) {
+        for(let j = 0; j < filteredSongs[i].track.artists.length; j++) {
+            artistList.push(filteredSongs[i].track.artists[j].name)
+        }
+        releaseYearList.push(filteredSongs[i].track.album.release_date.substr(0, 4))
+        popularityList.push(filteredSongs[i].track.popularity);
+    }
+    const uniqueArtistCount = new Set(artistList).size;
+
+        
+
+    document.getElementById('total-songs-stat').innerHTML = filteredSongs.length;
+    document.getElementById('unique-artists-stat').innerHTML = uniqueArtistCount;
+    document.getElementById('release-year-average-stat').innerHTML = parseInt(getAverageOfList(releaseYearList));
+    document.getElementById('popularity-average-stat').innerHTML = parseInt(getAverageOfList(popularityList)) + "/100";
+   
+}
