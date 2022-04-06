@@ -50,12 +50,14 @@ function setDateValues() {
 }
 
 function startSearch() {
-    if(searchMode == "month") {
-        filterSongsByMonth()
-    } else if(searchMode == "range") {
-        filterSongsByRange()
-    } else {
-        console.log("Searching in all time")
+    if(finishedFetchingLikedSongs) {
+        if(searchMode == "month") {
+            filterSongsByMonth()
+        } else if(searchMode == "range") {
+            filterSongsByRange()
+        } else {
+            filterSongsByAllTime();
+        }
     }
 }
 
@@ -144,18 +146,17 @@ function filterSongsByMonth() {
     // console.log(new Date(2021, 0, 1))
     //go through the masterTrackList and check if songs have been added in that month-year, if yes add to var filteredSongs, if not move on.
     //Display songs 50/filteredSongs.count    
-    if(finishedFetchingLikedSongs) {
-        let filteredSongs = [];
-        let dateValues = setDateValues();
-        for(let i = 0; i < masterTrackList.length; i++) {
-            let songDate = new Date(masterTrackList[i].added_at.split('-')[0], masterTrackList[i].added_at.split('-')[1] - 1, masterTrackList[i].added_at.split('-')[2].split('T')[0], 0, 0, 0, 0)
-            if(songDate.getUTCMonth() == dateValues[0] && songDate.getUTCFullYear() == dateValues[1]) {
-                filteredSongs.push(masterTrackList[i])
-                console.log(masterTrackList[i], "Song is in range")
-            }    
-        }
-        console.log(filteredSongs)        
+    let filteredSongs = [];
+    let dateValues = setDateValues();
+    for(let i = 0; i < masterTrackList.length; i++) {
+        let songDate = new Date(masterTrackList[i].added_at.split('-')[0], masterTrackList[i].added_at.split('-')[1] - 1, masterTrackList[i].added_at.split('-')[2].split('T')[0], 0, 0, 0, 0)
+        if(songDate.getUTCMonth() == dateValues[0] && songDate.getUTCFullYear() == dateValues[1]) {
+            filteredSongs.push(masterTrackList[i])
+            console.log(masterTrackList[i], "Song is in range")
+        }    
     }
+    console.log(filteredSongs)        
+
 }
 
 function filterSongsByRange() {
@@ -172,5 +173,45 @@ function filterSongsByRange() {
             filteredSongs.push(masterTrackList[i])
         }
     }
+    console.log(filteredSongs)
+
 }
 
+function filterSongsByAllTime() {
+    filteredSongs = masterTrackList;
+    console.log(filteredSongs)
+}
+
+function displaySongListing(song, listingCounter) {
+    var trimmedTrackName = song.track.name;
+    if (screen.width <= 400) {
+        trimmedTrackName = song.track.name.substring(0, 12) + "...";
+    }
+
+    document.getElementById("song-listing-container").innerHTML +=
+    `
+    <div class="song-listing active-song-listing">
+        <div class="song-image"></div>
+        <div class="song-text-container">
+                <h5 class="song-name bold">Everbody talks and talks and talks</h5>
+                <h5 class="song-artist gray">The Weekend</h5>
+        </div>
+        <h5 class="song-albumn gray">Red  DressDressDressDressDressDress Dress DressDress</h5>
+        <div class="play-pause-button"><img src="assets/icons/play button.svg" alt=""></div>
+        <div class="shift-arrow-button"><img src="assets/icons/up arrow.svg" alt=""></div>
+    </div>
+    `
+}
+
+function createSongListings() {
+    let listingCounter = 0;
+    if(filteredSongs >= 50) {
+        for(let i = 0; i <= 50; i++) {
+            displaySongListing(filteredSongs[i], listingCounter)
+        }
+    } else {
+        for(let i = 0; i <= filteredSongs.length; i++) {
+            displaySongListing(filteredSongs[i], listingCounter)
+        }
+    }
+}
