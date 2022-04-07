@@ -253,33 +253,24 @@ select {
   text-align: center;
 }
 
-#player-container {
-  width: 100%;
+
+
+/* ===================================== */
+#related-songs-container h4 {
+  padding-top: 20px;
+  text-align: center;
+}
+
+#related-songs-container {
   height: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-#song-player-image {
-  width: 132px;
-  height: 132px;
-  border-radius: 5px;
-  background-color: #292929;
-  margin: 50px 0 30px 0;
+#related-songs-listing-container {
+  height: 90%;
+  overflow-y: scroll;
+  box-sizing: border-box;
 }
 
-#music-controller-container {
-  width: 100%;
-  display: flex;
-  align-content: center;
-  justify-content: space-around;
-  margin-top: 25px;
-}
-
-#music-controller-container img {
-  cursor: pointer;
-}
 
 @media only screen and (min-width: 1200px) {
   ::-webkit-scrollbar {
@@ -310,9 +301,6 @@ select {
     width: 75%;
   }
 
-  .play-pause-button {
-    display: none;
-  }
   #right-sidebar {
     display: none;
   }
@@ -393,7 +381,7 @@ select {
     height: 100%;
   }
 
-  #right-sidebar #player-container {
+  #right-sidebar #related-songs-container {
     display: none;
   }
 }

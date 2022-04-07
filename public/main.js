@@ -57,6 +57,11 @@ function clearSongListingContainer() {
     document.getElementById("song-listing-container").innerHTML = ""
 }
 
+function clearRelatedSongListingContainer() {
+    document.getElementById("related-songs-listing-container").innerHTML = ""
+}
+
+
 function finishedLoadingSongsAnimation() {
     document.getElementById('search-button').className = 'button button-dark'
     document.getElementById('add-playlist-button').className = 'button button-dark'
@@ -66,6 +71,7 @@ function startSearch() {
     let filteredSongs = [];
     if(finishedFetchingLikedSongs) {
         clearSongListingContainer()
+        clearRelatedSongListingContainer()
         if(searchMode == "month") {
             filteredSongs = filterSongsByMonth()
         } else if(searchMode == "range") {
@@ -73,7 +79,12 @@ function startSearch() {
         } else {
             filteredSongs = filterSongsByAllTime()
         }
-        displaySongsData(filteredSongs);
+        if(filteredSongs.length > 0) {
+            displaySongsData(filteredSongs);
+            if(screen.width > 1200) {
+                creatingSongSuggestions(filteredSongs)
+            }
+        }
     }
 }
 
@@ -284,4 +295,81 @@ function displaySongsData(filteredSongs) {
     document.getElementById('release-year-average-stat').innerHTML = parseInt(getAverageOfList(releaseYearList));
     document.getElementById('popularity-average-stat').innerHTML = parseInt(getAverageOfList(popularityList)) + "/100";
    
+}
+
+async function creatingSongSuggestions(filteredSongs) {
+    let suggestedSongList = [];
+    
+    for(let i = 0; i < 6; i++) {
+        const random = Math.floor(Math.random() * filteredSongs.length);
+        const chosenArtistId = filteredSongs[random].track.artists[0].id;
+        
+        let suggestedArtistsList = await getRelatedArtists(chosenArtistId)
+        const randomNum = Math.floor(Math.random() * suggestedArtistsList.artists.length);
+        let randomRelatedArtistId = suggestedArtistsList.artists[randomNum].id
+        let artistTopTracksList = await getArtistTopTracks(randomRelatedArtistId)
+        for(let j = 0; j < artistTopTracksList.tracks.length; j++) {
+            suggestedSongList.push(artistTopTracksList.tracks[j]);
+        }
+    }
+    displayRelatedSongs(suggestedSongList);
+    
+}
+
+async function getRelatedArtists(artistId) {
+    return fetch('https://api.spotify.com/v1/artists/' + artistId + '/related-artists', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + access_token,
+                'content-Type': 'application/json'
+            }
+        }).then(response => {
+            // console.log(response)   
+            return response.json()  
+        }).then(data => {
+            console.log(data.artists[4])
+            return data
+        })
+}
+
+async function getArtistTopTracks(artistId) {
+    return fetch('https://api.spotify.com/v1/artists/' + artistId + '/top-tracks?market=US', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + access_token,
+                'content-Type': 'application/json'
+            }
+        }).then(response => {
+            // console.log(response)   
+            return response.json()  
+        }).then(data => {
+            return data
+        })
+}
+
+function displayRelatedSongs(songs) {
+    for(let i = 0; i < 15; i++) {
+        const random = Math.floor(Math.random() * songs.length)
+        let song = songs[random];
+        let artistList = [];
+        for(let j = 0; j < song.artists.length; j++) {
+            artistList.push(song.artists[j].name)
+        }
+        document.getElementById("related-songs-listing-container").innerHTML +=
+        `
+        <div class="song-listing">
+            <div class="song-image"><img src="${song.album.images[2].url}"></div>
+            <div class="song-text-container">
+                    <h5 class="song-name bold">${song.name}</h5>
+                    <h5 class="song-artist gray">${artistList.join(", ")}</h5>
+            </div>
+            <div onClick="addSong(${"'" + song.id + "'"})" class="shift-arrow-button"><img src="assets/icons/plus icon.svg" alt=""></div>
+        </div>
+    `
+    songs.splice(random, 1)
+    }
+}
+
+function addSong(songId) {
+    console.log(songId)
 }
