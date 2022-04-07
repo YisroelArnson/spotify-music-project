@@ -1,6 +1,6 @@
 // Date selector functions
 //For this function to work, the class names and Ids must match this format. [month, range, all-time]-...
-var devMode = false;
+var devMode = true;
 if(devMode) {
     var baseUrl = "http://localhost:5000";
 } else {
@@ -76,7 +76,6 @@ function startSearch() {
         displaySongsData(filteredSongs);
     }
 }
-
 
 function getAccessToken() {
     const queryString = window.location.search;
