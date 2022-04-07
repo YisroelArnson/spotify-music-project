@@ -13,6 +13,133 @@ body {
   display: none;
 }
 
+/* Fonts */
+/* Program 80px bold */
+h1 {
+  font-size: clamp(80px, 10vw, 105px);
+  font-family: program, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  margin-top: 5px;
+  margin-bottom: 50px;
+}
+
+/* Program 60px bold*/
+h2 {
+  font-size: clamp(60px, 3vw, 90px);
+  font-family: program, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+/* Program 36px medium*/
+h3 {
+  font-size: clamp(30px, 2vw, 40px);
+  font-family: program, sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  margin-top: 15px;
+}
+/* Program 24px medium*/
+h4 {
+  font-size: 24px;
+  font-family: program, sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  margin: 0;
+}
+/* Program 16px medium */
+h5 {
+  font-size: 16px;
+  font-family: program, sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+/* Edita 36px italic */
+h6 {
+  font-size: clamp(24px, 2vw, 45px);
+  font-family: edita, serif;
+  font-weight: 400;
+  font-style: italic;
+}
+/* Edita 36px normal */
+h7 {
+  font-size: 36px;
+  font-family: edita, serif;
+  font-weight: 400;
+}
+/* Edita 26px normal */
+h8 {
+  font-size: clamp(26px, 1.5vw, 40px);
+  font-family: edita, serif;
+  font-weight: 400;
+}
+/* Edita 16px normal */
+h9 {
+  font-size: 16px;
+  font-family: edita, serif;
+  font-weight: 400;
+}
+/* Edita 16px italic */
+h10 {
+  font-size: 16px;
+  font-family: edita, serif;
+  font-weight: 400;
+  font-style: italic;
+}
+/* Fonts */
+/* 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
+/* Colors */
+.neon {
+  color: #fefb02;
+}
+.neon-bg {
+  background-color: #fefb02;
+}
+.e7 {
+  color: #e7e7e7;
+}
+.e7-bg {
+  background-color: #e7e7e7;
+}
+.gray {
+  color: #7f7e7e;
+}
+.gray-bg {
+  background-color: #7f7e7e;
+}
+/* Colors */
+/* 
 
 
 
