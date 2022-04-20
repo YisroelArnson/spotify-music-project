@@ -26,7 +26,7 @@ async function onLoad() {
     displayTopSong(insight)
     displayTopGenres(insight)
     displayTopYearRelease(insight)
-
+    displayPlaylistCount(insight)
     popArtist = await fetchPopArtist(insight.pop_artists);
     popArtistTopSongs = await fetchArtistTopSongs(popArtist)
     displayTopArtist(popArtist, popArtistTopSongs)
@@ -170,6 +170,11 @@ function displayTopArtist(artist, topTracks) {
 
 
 }
+
+function displayPlaylistCount(insight) {
+    document.getElementById('total-playlist-count').innerHTML = insight.total_playlist_count
+}
+
 
 async function fetchPopSong() {
     return new Promise((resolve, reject) => {

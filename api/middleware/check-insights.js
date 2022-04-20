@@ -10,18 +10,18 @@ module.exports = (req, res, next) => {
             if(err) {
                 console.log(err)
             }
-            console.log("The difference is: " + (doc.total_song_count - count))
+            // console.log("The difference is: " + (doc.total_song_count - count))
 
-            //check if neccesary to run through data and pull out data
-            if(count - doc.total_song_count  > 500) {
-                console.log('New insights required...')
-                //Time to run through tracks and pull out new insights
+            // //check if neccesary to run through data and pull out data
+            // if(count - doc.total_song_count  > 500) {
+            //     console.log('New insights required...')
+            //     //Time to run through tracks and pull out new insights
                 findInsights(count)
-            } else {
-                console.log('New insights are not required...')
-                console.log('Adding new Tracks to trackSchema...')
-                console.log('===================================')
-            }
+            // } else {
+            //     console.log('New insights are not required...')
+            //     console.log('Adding new Tracks to trackSchema...')
+            //     console.log('===================================')
+            // }
             next();
             
         });

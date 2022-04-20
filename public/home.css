@@ -341,8 +341,15 @@ h10 {
 .box-7 {
   grid-column: 4;
   grid-row: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
+.box-7 h2 {
+  margin: 0;
+}
 .wrapper > div {
   background-color: #161616;
 }

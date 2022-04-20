@@ -1,7 +1,7 @@
 // Date selector functions
 
 //For this function to work, the class names and Ids must match this format. [month, range, all-time]-...
-var devMode = false;
+var devMode = true;
 if(devMode) {
     var baseUrl = "http://localhost:5000";
 } else {
@@ -396,6 +396,8 @@ async function spotifyPlaylistController() {
         const userId = await getUserInfo();
         const playlistId = await createSpotifyPlaylist(userId, playlistName)
         await populatePlaylist(playlistId);
+        postTracksToDatabase(currentDisplayedSongList)
+        postPlaylistToDatabase(currentDisplayedSongList)
     } else {
         alert('Please input a name for the playlist')
     }
@@ -446,4 +448,28 @@ async function populatePlaylist(playlistId) {
         }
         index += 100;
     }, 100)    
+}
+
+function postTracksToDatabase(playlist) {
+    fetch(baseUrl + "/tracks/tracks", {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(playlist)
+    }).then(response => {
+        console.log(response)
+    })
+}
+
+function postPlaylistToDatabase(playlist) {
+    fetch(baseUrl + "/tracks/playlist", {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(playlist)
+    }).then(response => {
+        console.log(response)
+    })
 }

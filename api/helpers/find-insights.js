@@ -1,11 +1,13 @@
 var mongoose = require('mongoose')
 const Track = require('../models/tracks');
+const Playlist = require('../models/playlists');
 const createInsightObj = require('../helpers/create-insights-doc');
 module.exports = (count) => {
 // Loop through tracks and create dictionaries of data listed in Notion
     console.log("Finding insights...");
 
     var total_song_count = count;
+    var total_playlist_count;
     var pop_song = {};
     var pop_artists = {};
     var pop_genres = {};
@@ -16,6 +18,8 @@ module.exports = (count) => {
     let genre_dict = {}
     let year_dict = {}
     
+
+
 
     Track.find({} , (err, tracks) => {
         if(err) {
@@ -71,12 +75,19 @@ module.exports = (count) => {
             return requiredObj;
         };
 
-        pop_artists = pickHighest(artist_dict, 10)
-        pop_genres = pickHighest(genre_dict, 10)
-        pop_year_release = pickHighest(year_dict, 12)
+        Playlist.count({}, function(err, playlistCount){
+            total_playlist_count = playlistCount;
+            console.log(playlistCount)
 
-        createInsightObj(total_song_count, pop_song, pop_artists, pop_genres, pop_year_release)
+            pop_artists = pickHighest(artist_dict, 10)
+            pop_genres = pickHighest(genre_dict, 10)
+            pop_year_release = pickHighest(year_dict, 12)
 
-        console.log('New insights saved...')
+            createInsightObj(total_song_count, pop_song, pop_artists, pop_genres, pop_year_release, total_playlist_count)
+
+            console.log('New insights saved...')
+        })
+
+        
     })
 }

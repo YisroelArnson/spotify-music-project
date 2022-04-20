@@ -21,10 +21,9 @@ exports.add_full_playlist = (req, res) => {
 }
 
 exports.add_tracks = async (req, res) => {
+    console.log('made it to track.js add_tracks')
     const playlist = req.body;
-
     const accessTokenData = await getClientToken()
-    
     for(let i = 0; i < playlist.length; i++) {
         let song_temp = playlist[i];
         let artists_array = []
@@ -62,7 +61,6 @@ exports.add_tracks = async (req, res) => {
                                     release_date: song_temp.track.album.release_date,
                                     genres: parsedData.genres
                                 })
-        
                                 track.save()
                             } else {
                                 console.log('========+++++++++=+======== Error in request block')
