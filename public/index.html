@@ -9,6 +9,8 @@
     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" -->
         <!-- integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="universal.css">
+
     <title>Discover</title>
 </head>
 
@@ -27,7 +29,7 @@
     <div class="wrapper">
         <div class="box box-1">
             <div class="container">
-                <h1 class="neon">15,857</h1>
+                <h1 id="song-count-text" class="neon">15,857</h1>
                 <h8>songs added to playlists using this site</h8>
             </div>
         </div>
@@ -35,21 +37,21 @@
             <div class="container">
                 <div>
                     <h4>Top Song</h4>
-                    <h1 class="neon">Part of Me</h1>
+                    <h1 id="top-song-title" class="neon">Part of Me</h1>
                     <div class="flex-box">
                         <div>
                             <h10>Artist</h10>
-                            <h3>Noah Kahan</h3>
+                            <h3 id="top-song-artist">Noah Kahan</h3>
                             <br>
                             <h10>Genre</h10>
-                            <h3>Pop, Rock, Swing</h3>
+                            <h3 id="top-song-genres">Pop, Rock, Swing</h3>
                         </div>
                         <div>
                             <h10>Release Date</h10>
                             <h3>January 5th, 2015</h3>
                             <br>
                             <h10>Popularity</h10>
-                            <h3>69 / 100</h3>
+                            <h3 id="top-song-popularity">69 / 100</h3>
                         </div>
                     </div>
                 </div>
@@ -63,38 +65,12 @@
                 <div class="flex-box">
                     <h4>Top Artist</h4>
                     <h10 class="e7">Artist</h10>
-                    <h2 class="neon">Taylor Swift</h2>
+                    <h2 id="top-artist-name" class="neon">Taylor Swift</h2>
                     <h10 class="e7">Popularity</h10>
-                    <h4>94 / 100</h4>
+                    <h4 id="top-artist-pop">94 / 100</h4>
                 </div>
-                <div class="flex-box song-table-container">
+                <div id="song-table-container" class="flex-box song-table-container">
                     <h10 class="e7">Top Songs</h10>
-                    <div class="song-table-row">
-                        <h9>Exile</h9>
-                            <h9 class="e7">Folklore</h9>
-                            <h9 class="e7">3:49</h9>
-                    </div>
-                    <div class="song-table-row">
-                        <h9>Exile</h9>
-                            <h9 class="e7">Folklore</h9>
-                            <h9 class="e7">3:49</h9>
-                    </div>
-                    <div class="song-table-row">
-                        <h9>Exile</h9>
-                            <h9 class="e7">Folklore</h9>
-                            <h9 class="e7">3:49</h9>
-                    </div>
-                    <div class="song-table-row">
-                        <h9>Exile</h9>
-                            <h9 class="e7">Folklore</h9>
-                            <h9 class="e7">3:49</h9>
-                    </div>
-                    <div class="song-table-row">
-                        <h9>Exile</h9>
-                            <h9 class="e7">Folklore</h9>
-                            <h9 class="e7">3:49</h9>
-                        
-                    </div>
                 </div>
             </div>
 
@@ -103,26 +79,48 @@
             <div class="container">
                 <div class="flex-box">
                     <h6>1st</h6>
-                    <h2 class="neon">2019</h2>
+                    <h2 id="top-year-release-1" class="neon">2019</h2>
                     <h8>Most popular song release years</h8>
                 </div>
                 <div class="flex-box">
-                    <h6>2st</h6>
-                    <h2 class="e7">1995</h2>
+                    <h6>2nd</h6>
+                    <h2 id="top-year-release-2" class="e7">1995</h2>
                 </div>
                 <div class="flex-box">
                     <h6>3rd</h6>
-                    <h2 class="gray">2021</h2>
+                    <h2 id="top-year-release-3" class="gray">2021</h2>
                 </div>
             </div>
         </div>
-        <div class="box box-5">box 5</div>
-        <div class="box box-6">box 6</div>
+        <div class="box box-5">
+            <div class="container">
+                <div>
+                    <h8>1st</h8>
+                    <h2 id="top-genre-1">Pop Rock</h2>
+                </div>
+                <div>
+                    <h8>2nd</h8>
+                    <h2 id="top-genre-2">Pop Rock</h2>
+                </div>
+                <div>
+                    <h8>3rd</h8>
+                    <h2 id="top-genre-3">Pop Rock</h2>
+                </div>
+            </div>
+        </div>
+        <div class="box box-6">
+            <div class="container">
+                <h2>Try it out</h2>
+                <a href="/playlist">
+                    <button><h6>Go</h6></button>
+                </a>
+            </div>
+        </div>
         <div class="box box-7">box 7</div>
     </div>
 
-
-    <!-- <section id="loading-section">
+<!-- 
+    <section id="loading-section">
         <h1>loading...</h1>
     </section>
     <section id="content-section">

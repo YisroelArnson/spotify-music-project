@@ -244,6 +244,7 @@ h10 {
 .box-3 .song-table-row {
   width: 100%;
   margin: 15px 0;
+  color: #fff;
   display: flex;
   justify-content: space-between;
 }
@@ -283,15 +284,58 @@ h10 {
   width: clamp(200px, 7vw, 450px);
 }
 /* 4444444444444444 */
-
+/* 5555555555555555 */
 .box-5 {
   grid-column: 3;
   grid-row: 3 / 5;
 }
 
+.box-5 .container {
+  padding: clamp(2em, 2vw, 5em);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  
+}
+
+.box-5 div {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+
+.box-5 div h2 {
+  writing-mode:vertical-rl;
+  margin: 25px 0;
+}
+
+
+
+/* 55555555555555 */
 .box-6 {
   grid-column: 4;
   grid-row: 3;
+}
+
+.box-6 .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.box-6 .container button {
+  width: 140px;
+  height: 50px;
+  background-color: #FEFB02;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.box-6 h6 {
+  margin: 0;
 }
 
 .box-7 {
