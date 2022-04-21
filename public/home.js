@@ -8,9 +8,7 @@ async function onLoad() {
     console.log('Fetching insight')
     insight = await fetchInsight()
     console.log('Insight fetched: ' + insight)
-    // displayContentSection()
     console.log(insight)
-    // displayInsight(insight)
     displaySongCount(insight)
     //Fetch access token so that I can fetch the popular song using the ID I got from insight
     console.log('Fetching Access Token')
@@ -22,7 +20,6 @@ async function onLoad() {
     popSong = await fetchPopSong()
     console.log("Pop_song fetched: " + popSong)
     console.log(popSong)
-    // displayPopSong(popSong) DELETE SOON
     displayTopSong(insight)
     displayTopGenres(insight)
     displayTopYearRelease(insight)
@@ -74,20 +71,20 @@ function displayContentSection() {
     document.getElementById('content-section').style.display = 'block'
 }
 
-// function displayInsight(insightData) {
-//     document.getElementById('insight').innerHTML = JSON.stringify(insightData);
-// }
-
 function displaySongCount(insightData) {
     var num = insightData.total_song_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     document.getElementById('song-count-text').innerHTML = num;
 }
 
 function displayTopSong(insightData) {
+
+    let genres = insightData.pop_song.genres.splice(0, 2)
     document.getElementById('top-song-title').innerHTML = insightData.pop_song.song_name.substring(0, 10);
     document.getElementById('top-song-artist').innerHTML = insightData.pop_song.artists[0].name;
-    document.getElementById('top-song-genres').innerHTML = toTitleCase(insightData.pop_song.genres.join(", "));
+    document.getElementById('top-song-genres').innerHTML = toTitleCase(genres.join(", "));
     document.getElementById('top-song-popularity').innerHTML = insightData.pop_song.popularity + " / 100";
+    // document.getElementById('top-song-img').src = insightData.pop_song
+    
 }
 
 function displayTopArtist() {

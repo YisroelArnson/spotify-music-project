@@ -59,7 +59,8 @@ exports.add_tracks = async (req, res) => {
                                     popularity: song_temp.track.popularity,
                                     album_id: song_temp.track.album.id,
                                     release_date: song_temp.track.album.release_date,
-                                    genres: parsedData.genres
+                                    genres: parsedData.genres,
+                                    album_images: song_temp.track.album.images
                                 })
                                 track.save()
                             } else {
