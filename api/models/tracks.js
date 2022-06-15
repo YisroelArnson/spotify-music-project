@@ -12,7 +12,8 @@ const trackSchema = mongoose.Schema(
         album_id: {type: String},
         frequency: {type: Number, default: 1},
         release_date: {type: String},
-        genres: []
+        genres: [],
+        album_images: []
     }
 );
 

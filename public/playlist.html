@@ -10,11 +10,23 @@
         <title>Playlist Creator</title>
     </head>
 <body onload="getAccessToken()">
+    <div id="loader">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
     <div id="wrapper">
         <div class="section" id="left-sidebar">
             <div class="container">
-                <h3>people's <br/> music</h3>
-                <a href="/public/index.html">
+                <a href="/">
+                    <h3>people's <br/> music</h3>
+                </a>
+                <a href="/">
                     <div class="button">
                         <div class="button-icon"><img src="assets/icons/explore icon.svg" alt=""></div>
                         <h5>Explore</h5>
@@ -139,8 +151,8 @@
                         <div id="search-button" class="button button-faded" onClick="startSearch()"><img src="assets/icons/search icon.svg" alt=""></div>
                     </div>
                     <div id="playlist-input-row" class="inputs-row">
-                        <input type="text" placeholder="Playlist name">
-                        <div id="add-playlist-button" class="button button-faded"><img src="assets/icons/plus icon.svg" alt=""></div>
+                        <input id="playlist-name-input" type="text" placeholder="Playlist name">
+                        <div onClick="spotifyPlaylistController()" id="add-playlist-button" class="button button-faded"><img src="assets/icons/plus icon.svg" alt=""></div>
                     </div>
             </div>
             <div id="song-listing-container">

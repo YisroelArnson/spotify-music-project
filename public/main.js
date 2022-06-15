@@ -1,4 +1,5 @@
 // Date selector functions
+
 //For this function to work, the class names and Ids must match this format. [month, range, all-time]-...
 var devMode = true;
 if(devMode) {
@@ -35,6 +36,28 @@ function navBarSelectDetector(option) {
             divsToHide[i].style.display = "none"; // depending on what you're doing
         }
     }
+}
+
+function clearLoader() {
+    let lines = document.getElementsByClassName('line');
+    // let i = 0;
+    // let myInterval = setInterval(() => {
+    //     lines[i].style.opacity = "0";
+    //     if(i == lines.length) {
+    //         clearInterval(myInterval);
+    //     } else {
+    //         i++;
+    //     }
+    // }, 50)
+    for(let i = 0; i < lines.length; i++) {
+        lines[i].style.opacity = "0";
+    }
+    setTimeout(() => {
+        document.getElementById("loader").style.opacity = "0";
+        setTimeout(() => {
+            document.getElementById("loader").style.display = "none";
+        }, 1000)
+    }, 550);
 }
 
 function setDateValues() {
@@ -85,6 +108,7 @@ function startSearch() {
                 creatingSongSuggestions(filteredSongs)
             }
         }
+        currentDisplayedSongList = filteredSongs;
     }
 }
 
@@ -151,6 +175,7 @@ function getAllLikedSongs() {
             masterTrackList = masterTrackList.concat(data.items)
             getAllLikedSongs();
         } else {
+            clearLoader();
             console.log(masterTrackList)
             finishedFetchingLikedSongs = true;
             finishedLoadingSongsAnimation();
@@ -372,4 +397,102 @@ function displayRelatedSongs(songs) {
 
 function addSong(songId) {
     console.log(songId)
+}
+
+async function getUserInfo() {
+    return fetch('https://api.spotify.com/v1/me', {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + access_token
+        }
+    }).then(response => {
+        console.log(response)
+        return response.json()
+    }).then(data => {
+        return data.id;
+    })
+}
+
+async function spotifyPlaylistController() {
+    let playlistName = document.getElementById('playlist-name-input').value;
+    if(playlistName != '') {
+        const userId = await getUserInfo();
+        const playlistId = await createSpotifyPlaylist(userId, playlistName)
+        await populatePlaylist(playlistId);
+        postTracksToDatabase(currentDisplayedSongList)
+        postPlaylistToDatabase(currentDisplayedSongList)
+    } else {
+        alert('Please input a name for the playlist')
+    }
+}
+
+async function createSpotifyPlaylist(userId, playlistName) {
+    return fetch('https://api.spotify.com/v1/users/' + userId + '/playlists', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + access_token,
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                "name": playlistName,
+                "description": 'The top songs in my song library from a specific month. Playlist created with SpotifyPlaylistCreator.com',
+                "public": true
+            })
+        }).then(response => {
+            console.log(response)
+            return response.json()
+        }).then(data => {
+            return data.id
+        }).catch(error => console.log(error))       
+}
+
+async function populatePlaylist(playlistId) {
+    let uriTrackList = [];
+    let uriTrackListHolder = [];
+    let index = 0;
+    for(let i = 0; i < currentDisplayedSongList.length; i++) {
+        uriTrackList.push(currentDisplayedSongList[i]['track']['uri'])
+    }
+
+    let postInterval = setInterval(function() {
+        uriTrackListHolder = uriTrackList.slice(index, index + 100)
+        fetch('https://api.spotify.com/v1/playlists/' + playlistId + '/tracks', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + access_token,
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(uriTrackListHolder)
+        }).then(response => {
+            return response.status
+        }).catch(error => console.log(error))
+        if(index > uriTrackList.length - 100) {
+            clearInterval(postInterval);
+        }
+        index += 100;
+    }, 100)    
+}
+
+function postTracksToDatabase(playlist) {
+    fetch(baseUrl + "/tracks/tracks", {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(playlist)
+    }).then(response => {
+        console.log(response)
+    })
+}
+
+function postPlaylistToDatabase(playlist) {
+    fetch(baseUrl + "/tracks/playlist", {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(playlist)
+    }).then(response => {
+        console.log(response)
+    })
 }

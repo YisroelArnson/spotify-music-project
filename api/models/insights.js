@@ -7,7 +7,8 @@ const keyInsight = mongoose.Schema(
         pop_artists: {type: Object},
         pop_genres: {type: Object},
         pop_year_release: {type: Object},
-        total_song_count: {type: Number}
+        total_song_count: {type: Number},
+        total_playlist_count: {type: Number}
     },
     {
         timestamps: { createdAt: 'created_at' }
