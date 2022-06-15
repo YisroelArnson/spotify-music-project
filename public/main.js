@@ -1,7 +1,7 @@
 // Date selector functions
 
 //For this function to work, the class names and Ids must match this format. [month, range, all-time]-...
-var devMode = false;
+var devMode = true;
 if(devMode) {
     var baseUrl = "http://localhost:5000";
 } else {
@@ -36,6 +36,28 @@ function navBarSelectDetector(option) {
             divsToHide[i].style.display = "none"; // depending on what you're doing
         }
     }
+}
+
+function clearLoader() {
+    let lines = document.getElementsByClassName('line');
+    // let i = 0;
+    // let myInterval = setInterval(() => {
+    //     lines[i].style.opacity = "0";
+    //     if(i == lines.length) {
+    //         clearInterval(myInterval);
+    //     } else {
+    //         i++;
+    //     }
+    // }, 50)
+    for(let i = 0; i < lines.length; i++) {
+        lines[i].style.opacity = "0";
+    }
+    setTimeout(() => {
+        document.getElementById("loader").style.opacity = "0";
+        setTimeout(() => {
+            document.getElementById("loader").style.display = "none";
+        }, 1000)
+    }, 550);
 }
 
 function setDateValues() {
@@ -153,6 +175,7 @@ function getAllLikedSongs() {
             masterTrackList = masterTrackList.concat(data.items)
             getAllLikedSongs();
         } else {
+            clearLoader();
             console.log(masterTrackList)
             finishedFetchingLikedSongs = true;
             finishedLoadingSongsAnimation();

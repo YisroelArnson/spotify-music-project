@@ -1,3 +1,7 @@
+:root {
+  --animation-time: 2s; 
+}
+
 html,
 body {
   height: 100%;
@@ -9,6 +13,123 @@ body {
   height: 100%;
   display: flex;
 }
+
+/* loader */
+#loader {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: #fff;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 1s;
+}
+
+#loader .line {
+  width: 4px;
+  height: 60px;
+  margin: 0 3px;
+  border-radius: 5px;
+  background-color: #292929;
+  background: #292929;
+  transition: opacity 0.5s;
+}
+
+#loader .line:nth-child(1) {
+  animation: changeHeight2 0.3s ease-in-out alternate infinite, fadeIn 2s;
+}
+
+#loader .line:nth-child(2) {
+  animation: changeHeight 0.5s ease-in-out alternate infinite, fadeIn 2s;
+}
+
+#loader .line:nth-child(3) {
+  animation: changeHeight3 0.4s ease-in-out alternate infinite, fadeIn 2s;
+}
+
+#loader .line:nth-child(4) {
+  animation: changeHeight 0.4s ease-in-out alternate infinite, fadeIn 2s;
+}
+
+#loader .line:nth-child(5) {
+  animation: changeHeight2 0.3s ease-in-out alternate infinite, fadeIn 2s;
+}
+
+#loader .line:nth-child(6) {
+  animation: changeHeight3 0.3s ease-in-out alternate infinite, fadeIn 2s;
+}
+
+#loader .line:nth-child(7) {
+  animation: changeHeight3 0.4s ease-in-out alternate infinite, fadeIn 2s;
+}
+
+#loader .line:nth-child(8) {
+  animation: changeHeight2 0.5s ease-in-out alternate infinite, fadeIn 2s;
+}
+
+@keyFrames expandLines {
+  from {
+    width: 4px;
+    height: 60px;
+    margin: 0 3px;
+  }
+  to {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+  }
+}
+
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes changeHeight {
+  0% {
+    height: 60px;
+  }
+  100% {
+    height: 30px;
+  }
+}
+
+@keyframes changeHeight2 {
+  0% {
+    height: 60px;
+  }
+  100% {
+    height: 40px;
+  }
+}
+
+@keyframes changeHeight3 {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 70px;
+  }
+}
+
+
+/* loader */
+
+
+
+
+
+
+
+
 
 .button {
   border-radius: 5px;
