@@ -1,194 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://use.typekit.net/zxy0kqx.css">
-        <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="universal.css">
-        <title>Playlist Creator</title>
-    </head>
-<body onload="getAccessToken()">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://use.typekit.net/zxy0kqx.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="universal.css" />
+    <title>Playlist Creator</title>
+  </head>
+  <body onload="getAccessToken()">
     <div id="loader">
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
     </div>
     <div id="wrapper">
-        <div class="section" id="left-sidebar">
-            <div class="container">
-                <a href="/">
-                    <h3>people's <br/> music</h3>
-                </a>
-                <a href="/">
-                    <div class="button">
-                        <div class="button-icon"><img src="assets/icons/explore icon.svg" alt=""></div>
-                        <h5>Explore</h5>
-                   </div>
-                </a>
-            <div class="line"></div>
-                <div id="month-button" onClick="navBarSelectDetector('month')" class="button button-active">
-                    <div class="button-icon"><img src="assets/icons/month icon.svg" alt=""></div>
-                    <h5>Monthly</h5>
-                </div>
-                <div id="range-button" onClick="navBarSelectDetector('range')" class="button">
-                    <div class="button-icon"><img src="assets/icons/month range icon.svg" alt=""></div>
-                    <h5>Range of Months</h5>
-                </div>
-                <div id="all-time-button" onClick="navBarSelectDetector('all-time')" class="button">
-                    <div class="button-icon"><img src="assets/icons/all time icon.svg" alt=""></div>
-                    <h5>All time</h5>
-                </div>
+      <div class="section" id="left-sidebar">
+        <div class="container">
+          <a href="/">
+            <h3>
+              people's <br />
+              music
+            </h3>
+          </a>
+          <a href="/">
+            <div class="button">
+              <div class="button-icon">
+                <img src="assets/icons/explore icon.svg" alt="" />
+              </div>
+              <h5>Explore</h5>
             </div>
+          </a>
+          <div class="line"></div>
+          <div
+            id="month-button"
+            onClick="navBarSelectDetector('month')"
+            class="button button-active"
+          >
+            <div class="button-icon">
+              <img src="assets/icons/month icon.svg" alt="" />
+            </div>
+            <h5>Monthly</h5>
+          </div>
+          <div
+            id="range-button"
+            onClick="navBarSelectDetector('range')"
+            class="button"
+          >
+            <div class="button-icon">
+              <img src="assets/icons/month range icon.svg" alt="" />
+            </div>
+            <h5>Range of Months</h5>
+          </div>
+          <div
+            id="all-time-button"
+            onClick="navBarSelectDetector('all-time')"
+            class="button"
+          >
+            <div class="button-icon">
+              <img src="assets/icons/all time icon.svg" alt="" />
+            </div>
+            <h5>All time</h5>
+          </div>
         </div>
-        <div class="section" id="middle-section">
-            <div id="inputs-container">
-                    <div id="search-input-row" class="inputs-row">
-                        <!-- month selectors -->
-                        <select class="select-element month-select-groups" onChange="setDateValues()" id="start-month-list">
-                            <option selected hidden>Month</option>
-                            <option>Jan</option>
-                            <option>Feb</option>
-                            <option>Mar</option>
-                            <option>Apr</option>
-                            <option>May</option>
-                            <option>Jun</option>
-                            <option>Jul</option>
-                            <option>Aug</option>
-                            <option>Sep</option>
-                            <option>Oct</option>
-                            <option>Nov</option>
-                            <option>Dec</option>
-                        </select>
-                        <select class="select-element month-select-groups" onChange="setDateValues()" id="start-year-list">
-                            <option selected hidden>Year</option>
-                            <option>2022</option>
-                            <option>2021</option>
-                            <option>2020</option>
-                            <option>2019</option>
-                            <option>2018</option>
-                            <option>2017</option>
-                            <option>2016</option>
-                            <option>2015</option>
-                            <option>2014</option>
-                            <option>2013</option>
-                            <option>2012</option>
-                            <option>2011</option>
-                            <option>2010</option>
-                        </select>
-                        <!-- range selectors -->
-                        <select class="select-element range-select-groups" onChange="setDateValues()" id="range-start-month-list">
-                            <option selected hidden>Start month</option>
-                            <option>Jan</option>
-                            <option>Feb</option>
-                            <option>Mar</option>
-                            <option>Apr</option>
-                            <option>May</option>
-                            <option>Jun</option>
-                            <option>Jul</option>
-                            <option>Aug</option>
-                            <option>Sep</option>
-                            <option>Oct</option>
-                            <option>Nov</option>
-                            <option>Dec</option>
-                        </select>
-                        <select class="select-element range-select-groups" onChange="setDateValues()" id="range-start-year-list">
-                            <option selected hidden>Start year</option>
-                            <option>2022</option>
-                            <option>2021</option>
-                            <option>2020</option>
-                            <option>2019</option>
-                            <option>2018</option>
-                            <option>2017</option>
-                            <option>2016</option>
-                            <option>2015</option>
-                            <option>2014</option>
-                            <option>2013</option>
-                            <option>2012</option>
-                            <option>2011</option>
-                            <option>2010</option>
-                        </select>
-                        <select class="select-element range-select-groups" onChange="setDateValues()" id="range-end-month-list">
-                            <option selected hidden>End month</option>
-                            <option>Jan</option>
-                            <option>Feb</option>
-                            <option>Mar</option>
-                            <option>Apr</option>
-                            <option>May</option>
-                            <option>Jun</option>
-                            <option>Jul</option>
-                            <option>Aug</option>
-                            <option>Sep</option>
-                            <option>Oct</option>
-                            <option>Nov</option>
-                            <option>Dec</option>
-                        </select>
-                        <select class="select-element range-select-groups" onChange="setDateValues()" id="range-end-year-list">
-                            <option selected hidden>End year</option>
-                            <option>2022</option>
-                            <option>2021</option>
-                            <option>2020</option>
-                            <option>2019</option>
-                            <option>2018</option>
-                            <option>2017</option>
-                            <option>2016</option>
-                            <option>2015</option>
-                            <option>2014</option>
-                            <option>2013</option>
-                            <option>2012</option>
-                            <option>2011</option>
-                            <option>2010</option>
-                        </select>
-                        
-                        <!-- <input type="text" placeholder="Start date">
+      </div>
+      <div class="section" id="middle-section">
+        <div id="inputs-container">
+          <div id="search-input-row" class="inputs-row">
+            <!-- month selectors -->
+            <select
+              class="select-element month-select-groups"
+              onChange="setDateValues()"
+              id="start-month-list"
+            >
+              <option selected hidden>Month</option>
+              <option>Jan</option>
+              <option>Feb</option>
+              <option>Mar</option>
+              <option>Apr</option>
+              <option>May</option>
+              <option>Jun</option>
+              <option>Jul</option>
+              <option>Aug</option>
+              <option>Sep</option>
+              <option>Oct</option>
+              <option>Nov</option>
+              <option>Dec</option>
+            </select>
+            <select
+              class="select-element month-select-groups"
+              onChange="setDateValues()"
+              id="start-year-list"
+            >
+              <option selected hidden>Year</option>
+              <option>2028</option>
+              <option>2027</option>
+              <option>2026</option>
+              <option>2025</option>
+              <option>2024</option>
+              <option>2023</option>
+              <option>2022</option>
+              <option>2021</option>
+              <option>2020</option>
+              <option>2019</option>
+              <option>2018</option>
+              <option>2017</option>
+              <option>2016</option>
+              <option>2015</option>
+              <option>2014</option>
+              <option>2013</option>
+              <option>2012</option>
+              <option>2011</option>
+              <option>2010</option>
+            </select>
+            <!-- range selectors -->
+            <select
+              class="select-element range-select-groups"
+              onChange="setDateValues()"
+              id="range-start-month-list"
+            >
+              <option selected hidden>Start month</option>
+              <option>Jan</option>
+              <option>Feb</option>
+              <option>Mar</option>
+              <option>Apr</option>
+              <option>May</option>
+              <option>Jun</option>
+              <option>Jul</option>
+              <option>Aug</option>
+              <option>Sep</option>
+              <option>Oct</option>
+              <option>Nov</option>
+              <option>Dec</option>
+            </select>
+            <select
+              class="select-element range-select-groups"
+              onChange="setDateValues()"
+              id="range-start-year-list"
+            >
+              <option selected hidden>Start year</option>
+              <option>2028</option>
+              <option>2027</option>
+              <option>2026</option>
+              <option>2025</option>
+              <option>2024</option>
+              <option>2023</option>
+              <option>2022</option>
+              <option>2021</option>
+              <option>2020</option>
+              <option>2019</option>
+              <option>2018</option>
+              <option>2017</option>
+              <option>2016</option>
+              <option>2015</option>
+              <option>2014</option>
+              <option>2013</option>
+              <option>2012</option>
+              <option>2011</option>
+              <option>2010</option>
+            </select>
+            <select
+              class="select-element range-select-groups"
+              onChange="setDateValues()"
+              id="range-end-month-list"
+            >
+              <option selected hidden>End month</option>
+              <option>Jan</option>
+              <option>Feb</option>
+              <option>Mar</option>
+              <option>Apr</option>
+              <option>May</option>
+              <option>Jun</option>
+              <option>Jul</option>
+              <option>Aug</option>
+              <option>Sep</option>
+              <option>Oct</option>
+              <option>Nov</option>
+              <option>Dec</option>
+            </select>
+            <select
+              class="select-element range-select-groups"
+              onChange="setDateValues()"
+              id="range-end-year-list"
+            >
+              <option selected hidden>End year</option>
+              <option>2028</option>
+              <option>2027</option>
+              <option>2026</option>
+              <option>2025</option>
+              <option>2024</option>
+              <option>2023</option>
+              <option>2022</option>
+              <option>2021</option>
+              <option>2020</option>
+              <option>2019</option>
+              <option>2018</option>
+              <option>2017</option>
+              <option>2016</option>
+              <option>2015</option>
+              <option>2014</option>
+              <option>2013</option>
+              <option>2012</option>
+              <option>2011</option>
+              <option>2010</option>
+            </select>
+
+            <!-- <input type="text" placeholder="Start date">
                         <input type="text" placeholder="End date"> -->
-                        <div id="search-button" class="button button-faded" onClick="startSearch()"><img src="assets/icons/search icon.svg" alt=""></div>
-                    </div>
-                    <div id="playlist-input-row" class="inputs-row">
-                        <input id="playlist-name-input" type="text" placeholder="Playlist name">
-                        <div onClick="spotifyPlaylistController()" id="add-playlist-button" class="button button-faded"><img src="assets/icons/plus icon.svg" alt=""></div>
-                    </div>
+            <div
+              id="search-button"
+              class="button button-faded"
+              onClick="startSearch()"
+            >
+              <img src="assets/icons/search icon.svg" alt="" />
             </div>
-            <div id="song-listing-container">
+          </div>
+          <div id="playlist-input-row" class="inputs-row">
+            <input
+              id="playlist-name-input"
+              type="text"
+              placeholder="Playlist name"
+            />
+            <div
+              onClick="spotifyPlaylistController()"
+              id="add-playlist-button"
+              class="button button-faded"
+            >
+              <img src="assets/icons/plus icon.svg" alt="" />
             </div>
-            
+          </div>
         </div>
-        <div class="section" id="right-sidebar">
-            <div id="statistic-container">
-                <div class="stat-box-divider">
-                    <div class="stat-box">
-                        <h3 id="total-songs-stat">0</h3>
-                        <h10>Songs</h10>
-                    </div>
-                    <div class="stat-box">
-                        <h3 id="unique-artists-stat">0</h3>
-                        <h10>Unique Artists</h10>
-                    </div>
-                </div>
-                <div class="stat-box-divider">
-                    <div class="stat-box">
-                        <h3 id="release-year-average-stat">0</h3>
-                        <h10>is the average year release</h10>
-                    </div>
-                    <div class="stat-box">
-                        <h3 id="popularity-average-stat">0/100</h3>
-                        <h10>is the average popularity</h10>
-                    </div>
-                </div>
+        <div id="song-listing-container"></div>
+      </div>
+      <div class="section" id="right-sidebar">
+        <div id="statistic-container">
+          <div class="stat-box-divider">
+            <div class="stat-box">
+              <h3 id="total-songs-stat">0</h3>
+              <h10>Songs</h10>
             </div>
-            <div id="related-songs-container">
-                <h4>Suggested Songs</h4>
-                <div id="related-songs-listing-container">
-                   
-                </div>
+            <div class="stat-box">
+              <h3 id="unique-artists-stat">0</h3>
+              <h10>Unique Artists</h10>
+            </div>
+          </div>
+          <div class="stat-box-divider">
+            <div class="stat-box">
+              <h3 id="release-year-average-stat">0</h3>
+              <h10>is the average year release</h10>
+            </div>
+            <div class="stat-box">
+              <h3 id="popularity-average-stat">0/100</h3>
+              <h10>is the average popularity</h10>
+            </div>
+          </div>
         </div>
-            <!-- <div id="player-container">
+        <div id="related-songs-container">
+          <h4>Suggested Songs</h4>
+          <div id="related-songs-listing-container"></div>
+        </div>
+        <!-- <div id="player-container">
                 <div id="song-player-image"><img src="" alt=""></div>
                 <h4 id="song-player-title">Everybody Talks</h4>
                 <h5 id="song-player-artist">John Pactson</h5>
@@ -198,10 +275,8 @@
                     <img src="assets/icons/skip right.svg" alt="">
                 </div>
             </div> -->
-        </div>
+      </div>
     </div>
-   
-
-</body>
-<script src="./main.js"></script>
+  </body>
+  <script src="./main.js"></script>
 </html>

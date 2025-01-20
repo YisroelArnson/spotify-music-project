@@ -7,11 +7,14 @@ var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 let port = process.env.PORT || 5000;
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-});
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
+  .then(() => console.log("Connected to DB"))
+  .catch(console.error);
 
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
