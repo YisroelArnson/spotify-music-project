@@ -24,6 +24,6 @@
     "request-promise": "^4.2.6"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": "20.x"
   }
 }
